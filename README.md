@@ -9,7 +9,7 @@ Formation intensive sur 22 semaines (mars-août 2026) en autodidacte, orientée 
 - Outils : Wireshark, Metasploit (à venir), Splunk (à venir)
 
 ## Write-ups et exercices pratiques :
-- - [Scan Nmap — Metasploitable 2](semaine_06/write_up_nmap_metsploitable.md) — 12 avril 2026
+- - [Scan Nmap — Metasploitable 2](semaine_06/write_up_nmap_metasploitable.md) — 12 avril 2026
 
 ## Certifications visées : 
 - CompTIA Security + (prévu : juillet 2026)
