@@ -12,7 +12,7 @@
 
 **Contexte :**
 
-Dans le cadre d'une formation en cybersécurité en autodidacte, avec pour objectif le passage de certification CompTIA Security+, j'ai réalisé un audit de reconnaissance avancé sur Metasploitable 2, une machine volontairement vulnérable.
+Dans le cadre d'une formation en cybersécurité, avec pour objectif le passage de certification CompTIA Security+, j'ai réalisé un audit de reconnaissance avancé sur Metasploitable 2, une machine volontairement vulnérable.
 L'objectif était d'identifier les services exposés, détecter les vulnérabilités connues, et produire un rapport structuré tel qu'attendu en contexte professionnel.
 
 **Commandes utilisées :**
@@ -45,7 +45,7 @@ Port | Service | Version | Risque
 80 | HTTP | Apache 2.2.8 | Non chiffré
 139/445 | SMB | Samba 3.0.20 | CVE-2007-2447 (exécution de code)
 1524 | Shell | **Metasploitable root shell** | Shell root ouvert sur le réseau
-3306 | MySQL | 5.0.51a | Potentiellement sans authorisation
+3306 | MySQL | 5.0.51a | Potentiellement sans authentification
 5432 | PostgreSQL | 8.3.0 |  
 5900 | VNC | Protocol 3.3 | Pas de chiffrement
 6667 | IRC | UnrealIRCd | Backdoor connue
@@ -63,7 +63,7 @@ CVE-2011-2523 | FTP/21 vsftpd 2.3.4 | Critique | Shell root — exploit confirm�
 CVE-2014-3566 | SMTP/25, PostgreSQL/5432 | Élevé | POODLE — déchiffrement SSL MitM
 CVE-2015-4000 | SMTP/25 | Élevé | Logjam — downgrade TLS vers chiffrement cassable
 CVE-2014-0224 | PostgreSQL/5432 | Élevé | CCS Injection — hijack session TLS
-RMI/1099 | Java RMI | Élevé | Exécution de code à distance
+Java RMI | RMI/1099 | Élevé | Exécution de code à distance
 DH faible | Multiple | Moyen | Écoute passive possible
 CSRF | HTTP/80 DVWA | Moyen | Formulaires sans protection
 SQLi potentielle | HTTP/80 Mutillidae | Moyen | Injection SQL sur ~30 URLs
@@ -73,11 +73,11 @@ Répertoires /admin exposés | HTTP/80 | Moyen | Énumération interface admin
 
 **Analyse :**
 
-*Vulnérabilité prioritaire : CVE-2011-2523 (vsftpd 2.3.4 bakdoor) :*
+*Vulnérabilité prioritaire : CVE-2011-2523 (vsftpd 2.3.4 backdoor) :*
 
 Explication niveau 1:
 
-Le serveur FTp installé sur cette amchine contient une porte dérobée introduite intentionnellement par un attaquant en 2011. Toute personne connaissant cette faille peut prendre le contrôle total de la machine en quelque secondes, sans mot de passe.
+Le serveur FTP installé sur cette machine contient une porte dérobée introduite intentionnellement par un attaquant en 2011. Toute personne connaissant cette faille peut prendre le contrôle total de la machine en quelques secondes, sans mot de passe.
 
 Explication niveau 2 - technique :
 
