@@ -10,6 +10,7 @@ Formation intensive sur 22 semaines (mars-août 2026) en autodidacte, orientée 
 
 ## Write-ups et exercices pratiques :
 - - [Scan Nmap — Metasploitable 2](semaine_06/write_up_nmap_metasploitable.md) — 12 avril 2026
+- - [Scan Nmap — Vulnérabilités](semaine_07/write_up_nmap_vuln.md) — 19 avril 2026
 
 ## Certifications visées : 
 - CompTIA Security + (prévu : juillet 2026)
