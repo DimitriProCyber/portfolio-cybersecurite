@@ -19,7 +19,7 @@
   
 *Situation professionnelle simulée :* 
 
-Un analyste SOC N1 eçoit une alerte : activité inhabituelle suspectée sur un poste Windows en environnement PME. Sa première mission est de collecter les logs de sécurité, les intégrer dans le SIEM, puis établir une baseline comportementale avant de pouvoir identifier toute anomalie.
+Un analyste SOC N1 reçoit une alerte : activité inhabituelle suspectée sur un poste Windows en environnement PME. Sa première mission est de collecter les logs de sécurité, les ingérer dans le SIEM, puis établir une baseline comportementale avant de pouvoir identifier toute anomalie.
 
 Ce lab simule cette séquence : de l'export brut des logs jusqu'à l'interprétation SOC d'un jeu de données réel.
 
@@ -81,7 +81,7 @@ Affiche les 20 premiers événements. Ingestion confirmée.
 ```spl
 source="security_logs.csv" | head 5 | table* 
 ```
-Affiche les 5 premiers événements et l'ensemble des colonnes disponibles (26 détectées). Vérification de la strucutre du fichier exploré : les champs TimeCreated, Id et Message sont présents et exploitables.
+Affiche les 5 premiers événements et l'ensemble des colonnes disponibles (26 détectées). Vérification de la structure du fichier exploré : les champs TimeCreated, Id et Message sont présents et exploitables.
 
 ```spl 
 source="security_logs.csv" | head 5 | table Id
@@ -94,7 +94,7 @@ Affiche les 5 premiers événements mais uniquement la colonne Id. Confirmation 
 ```spl 
 source="security_logs.csv" Id=4625
 ```
-Résultat : 0 occurence
+Résultat : 0 occurrence
 
 Aucun échec de connexion sur la période analysée. En contexte SOC, c'est un signal positif : pas de tentative de brute force détectée.
 
@@ -121,10 +121,11 @@ source="security_logs.csv" Id=4624 | stats count by Id
 Résultat : 58 événements de connexion réussie. Information redondante, mais permet d'introduire la logique "stats counts by". Peut-être utile pour comparer des ID (4624 et 4625 par exemple : source="security_logs.csv" Id=4624 OR Id=4625 | stats count by Id)
 
 
+timechart count regroupe les événements par intervalle de temps automatique (selon la fenêtre d'analyse) et compte le nombre d'occurrences dans chaque intervalle.
 ```spl  
 source="security_logs.csv" Id=4624 | timechart count
 ```
-Résultat : timechart count regroupe les événements par intervalle de temps automatique (selon la fenêtre d'analyse) et compte le nombre d'occurences dans chaque intervalle. Affichage de la répartition visualisée sous forme de graphique. Aucun pic anormal identifié, distribution régulières sur les heures ouvrées.
+Résultat :  Affichage de la répartition visualisée sous forme de graphique. Aucun pic anormal identifié, distribution régulières sur les heures ouvrées.
 
   
 *Recherche de privilèges élevés - Event ID 4672 :*
@@ -145,7 +146,7 @@ Corrélation : le nombre d'événements identiques (58) et la répartition tempo
   
 *Event IDs critiques - résultats complets :*
 
-Event ID | Signification | Occurences | Statut
+Event ID | Signification | Occurrences | Statut
 :---: | :--- | :---: | :---
 4624 | Connexion réussie | 58 | Normal (Logon Type 5, services système)
 4625 | Échec de connexion | 0 | Aucune tentative détectée
@@ -164,14 +165,14 @@ Event ID | Signification | Occurences | Statut
 
 Toutes les connexions 4624 présentent un Logon Type 5, correspondant à des services windows démarrés automatiquement (antivirus, planificateur de tâches, services OS). Ces connexions sont invisibles pour l"utilisateur et font partie du comportement normal d'un système  Windows en fonctionnement.
 
-Acune connexion de type 2 (connexion interactive) ou 10 (connexion à distance (RDP)) n'a été détectée, ce qui exclut toute session utilisateur humaine suspecte sur la période.
+Aucune connexion de type 2 (connexion interactive) ou 10 (connexion à distance (RDP)) n'a été détectée, ce qui exclut toute session utilisateur humaine suspecte sur la période.
 
   
 *Corrélation 4624 / 4672 :*
 
-Le ration 1:1 entre connexion réussie (4624) et attribution de privilèges (4672) est cohérent : chaque service système qui s'authentifie reçoit les droits nécessaires à son fonctionnement. Cette corrélation a été vérifiée par comparaison des répartitions temporelles (timechart), qui sont superposables.
+Le ratio 1:1 entre connexion réussie (4624) et attribution de privilèges (4672) est cohérent : chaque service système qui s'authentifie reçoit les droits nécessaires à son fonctionnement. Cette corrélation a été vérifiée par comparaison des répartitions temporelles (timechart), qui sont superposables.
 
-En contexte d'attaque, ce ration pourrait être rompu. Par exemple, un pic de 4672 sans 4624 correspondant signalerait une élévation de privilèges anormale.
+En contexte d'attaque, ce ratio pourrait être rompu. Par exemple, un pic de 4672 sans 4624 correspondant signalerait une élévation de privilèges anormale.
 
   
 *Construction de la baseline :*
@@ -187,7 +188,7 @@ Plages horaires | Heures ouvrées normales
   
 *IoC recherchés :*
 
-Idicateur ce compromission | Détecté
+Indicateur ce compromission | Détecté
 :--- | :---:
 Tentatives de brute force (4625 en rafale) | Non
 Connexion RDP suspecte (4624 Type 10, heure inhabituelle) | Non
@@ -221,13 +222,13 @@ Croiser des logs de sécurité Windows avec :
 
 Suite à cette baseline, configurer des alertes Splunk sur :
 
-- Plus de X événements 4625 en moins de 5 minutes -> suspiscion de brute force.
+- Plus de X événements 4625 en moins de 5 minutes -> suspicion de brute force.
 - Tout événement 4624 avec Logon Type 10 en dehors des heures ouvrées -> connexion RDP suspecte.
 - Tout événement 4720 en dehors d'une procédure RH validée -> création de compte non autorisée.
 - Tout pic de 4672 sans 4624 corrélé -> élévation de privilèges anormale.
 
   
-*Implémenter le parsing avanc des champs*
+*Implémenter le parsing avancé des champs*
 
 Le champ "Message" contient des informations structurées (Logon Type, nom de compte, IP source) non exploitables en l'état. Une prochaine étape consiste à utiliser la commande SPL *rex* pour extraire ces champs et les rendre requêtables. Ce qui permettrait par exemple de filtrer directement sur *LogonType=10*.
 
