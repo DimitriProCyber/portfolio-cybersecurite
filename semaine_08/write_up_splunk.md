@@ -73,7 +73,9 @@ Les requêtes sont exécutées dans l'ordre logique d'une investigation SOC : ex
 
 *Exploration initiale - vérification de l'ingestion :*
 
-Requête : source="security_logs.csv" | head 20 
+''' spl 
+source="security_logs.csv" | head 20 
+'''
 Affiche les 20 premiers événements. Ingestion confirmée.
 
 Requête : source="security_logs.csv" | head 5 | table* 
