@@ -83,13 +83,17 @@ source="security_logs.csv" | head 5 | table*
 ```
 Affiche les 5 premiers événements et l'ensemble des colonnes disponibles (26 détectées). Vérification de la strucutre du fichier exploré : les champs TimeCreated, Id et Message sont présents et exploitables.
 
-```spl source="security_logs.csv" | head 5 | table Id ```
+```spl 
+source="security_logs.csv" | head 5 | table Id
+ ```
 Affiche les 5 premiers événements mais uniquement la colonne Id. Confirmation que le champ Id contient bien les Event IDs Windows.
 
    
 *Recherche d'échecs de connexion - Event ID 4625 :*
 
-```spl  source="security_logs.csv" Id=4625 ```
+```spl 
+source="security_logs.csv" Id=4625
+```
 Résultat : 0 occurence
 
 Aucun échec de connexion sur la période analysée. En contexte SOC, c'est un signal positif : pas de tentative de brute force détectée.
@@ -97,31 +101,43 @@ Aucun échec de connexion sur la période analysée. En contexte SOC, c'est un s
    
 *Analyse des connexions réussies - Event ID 4624 :*
 
-```spl  source="security_logs.csv" Id=4624 ```
+```spl  
+source="security_logs.csv" Id=4624
+```
 Résultat : 58 événements  
 
   
 Investigation sur le type de connexion réussie :
 
-```spl  source="security_logs.csv" Id = 4624 | table TimeCreated, Id, Message ```
+```spl 
+source="security_logs.csv" Id = 4624 | table TimeCreated, Id, Message
+```
 Résultat : 58 connexions avec horodatage complet. Vérification des horaires de connexion afin de vérifier dans un premier temps qu'elles n'apparaissent pas à des heures inhabituelles. Vérification du Logon Type : elles présentent toutes un type d'ouverture de session 5 (services Windows automatique) visible dans Message.
 
 
-```spl  source="security_logs.csv" Id=4624 | stats count by Id ```
+```spl  
+source="security_logs.csv" Id=4624 | stats count by Id
+```
 Résultat : 58 événements de connexion réussie. Information redondante, mais permet d'introduire la logique "stats counts by". Peut-être utile pour comparer des ID (4624 et 4625 par exemple : source="security_logs.csv" Id=4624 OR Id=4625 | stats count by Id)
 
 
-```spl  source="security_logs.csv" Id=4624 | timechart count ```
+```spl  
+source="security_logs.csv" Id=4624 | timechart count
+```
 Résultat : timechart count regroupe les événements par intervalle de temps automatique (selon la fenêtre d'analyse) et compte le nombre d'occurences dans chaque intervalle. Affichage de la répartition visualisée sous forme de graphique. Aucun pic anormal identifié, distribution régulières sur les heures ouvrées.
 
   
 *Recherche de privilèges élevés - Event ID 4672 :*
 
-```spl  source="security_logs.csv" Id=4672 ```
+```spl  
+source="security_logs.csv" Id=4672
+```
 Résultat : 58 événements.
 Hypothèse : quand un service Windows se connecte il s'octroie un privilège pour accomplir sa tâche.
 
-```spl  source="security_logs.csv" Id=4672 | timechart count ```
+```spl  
+source="security_logs.csv" Id=4672 | timechart count
+```
 Résultat : Répartition temporelle identique à celle des événements 4624.
 
 Corrélation : le nombre d'événements identiques (58) et la répartition temporelle superposable entre 4624 et 4672 indiquent que chaque connexion service Windows (4624 Logon Type 5) génère systématiquement une attribution de privilèges élevés (4672). Ce comportement est attendu et normal pour les services systèmes.
