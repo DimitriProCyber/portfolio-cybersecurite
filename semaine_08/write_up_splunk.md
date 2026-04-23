@@ -56,6 +56,7 @@ Résultat : fichier "security_logs.csv" - 500 événements, 3 champs exportés (
 Chemin : Paramètres -> Ajouter des données -> Envoyer des fichiers depuis mon ordinateur
 
 Paramètre | Valeur
+:--- | :---
 Fichier | security_logs.csv
 Sourcetype |  CSV (détection automatique
 Hôte | windows-host
