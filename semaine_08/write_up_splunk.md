@@ -37,7 +37,9 @@ Un SIEM (Security Information and Event Management) est l'outil central d'un SOC
   
 *Etape 1 : export des logs Windows (PowerShell)*
 
-Commande : Get-WinEvent -LogName Security -MaxEvents 500 | Select-Object TimeCreated, Id, Message | Export-Csv C:\security_logs.csv -Encoding UTF8 -NoTypeInformation
+```powershell code
+Get-WinEvent -LogName Security -MaxEvents 500 | Select-Object TimeCreated, Id, Message | Export-Csv C:\security_logs.csv -Encoding UTF8 -NoTypeInformation
+```
 
 Explication :
 
