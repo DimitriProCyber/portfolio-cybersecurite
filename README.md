@@ -6,7 +6,7 @@ Formation intensive sur 22 semaines (mars-août 2026) en autodidacte, orientée 
 - Réseaux : TCP/IP, DNS, Wireshark, nmap
 - Systèmes : Linux (WSL), Windows CLI, permissions et gestion des utilisateurs
 - Sécurité : phishing, ingénierie sociale, RGPD, ANSSI, analyse de logs
-- Outils : Wireshark, Metasploit (à venir), Splunk (à venir)
+- Outils : Wireshark, Metasploit, Splunk 
 
 ## Write-ups et exercices pratiques :
 - - [Scan Nmap — Metasploitable 2](semaine_06/write_up_nmap_metasploitable.md) — 12 avril 2026
