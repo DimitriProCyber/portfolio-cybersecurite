@@ -377,11 +377,11 @@ L'attaque est **entièrement automatisée** et suit un schéma structuré (recon
 
 ### Priorité 1 — Confinement immédiat
 
-- [ ] Isoler le serveur du réseau dans l'attente de l'investigation complète
-- [ ] Supprimer `NVri2vhp.php` de `/admin/uploads/`
-- [ ] Invalider toutes les sessions actives (rotation du secret de session PHP)
-- [ ] Bloquer `111.224.250.131` au niveau pare-feu
-- [ ] Préserver la capture `.pcap` comme pièce forensique (chain of custody)
+- Isoler le serveur du réseau dans l'attente de l'investigation complète
+- Supprimer `NVri2vhp.php` de `/admin/uploads/`
+- Invalider toutes les sessions actives (rotation du secret de session PHP)
+-  Bloquer `111.224.250.131` au niveau pare-feu
+-   Préserver la capture `.pcap` comme pièce forensique (chain of custody)
 
 ### Priorité 2 — Remédiation des vulnérabilités
 
