@@ -78,7 +78,6 @@ L'investigation suit une méthode structurée en 5 étapes. Chaque étape condit
 | 8 | `ip.src == 73.124.22.98 && http.response.code == 200 && ip.dst == 111.224.250.131 && frame.number >= 1687 && frame.number <= 88647` | Restreindre les 200 OK à la plage temporelle exacte du directory enumeration — évite de mélanger avec les pages légitimes visitées en phase 1 | Phase 3 |
 | 9 | `ip.addr == 111.224.250.131 && tcp.port == 443` | Vérifier si le reverse shell s'est établi — aucun paquet attendu si le pare-feu bloque les connexions sortantes | Phase 5 |
 
----
 
 ## 3. Résultats
 
