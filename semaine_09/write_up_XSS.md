@@ -1,4 +1,4 @@
-# Write-up — Cross-Site Scripting (XSS)
+# Cross-Site Scripting (XSS)
 
 **Plateforme :** PortSwigger Web Security Academy  
 **Catégorie :** Cross-Site Scripting (XSS)  
