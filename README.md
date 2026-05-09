@@ -12,7 +12,9 @@ Formation intensive sur 22 semaines (mars-août 2026) en autodidacte, orientée 
 - - [Scan Nmap — Metasploitable 2](semaine_06/write_up_nmap_metasploitable.md) — 12 avril 2026
 - - [Scan Nmap — Vulnérabilités](semaine_07/write_up_nmap_vuln.md) — 19 avril 2026
 - - [Lab Splunk](semaine_08/write_up_splunk.md) — 23 avril 2026
-- - [Investigation Web - Wireshark](semaine_09/write_up_wireshark_investigation_web.md) — 3 mai 2026
+- - [Investigation Web - Wireshark](semaine_09/write_up_wireshark_investigation_web.md) — 03 mai 2026
+- - [Injection SQL](semaine_09/write_up_injection_SQL.md) — 08 mai 2026
+- - [Cross-Site Scripting (XSS)](semaine_09/write_up_XSS.md) — 09 mai 2026
 
 ## Certifications visées : 
 - CompTIA Security + (prévu : juillet 2026)
