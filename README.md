@@ -15,6 +15,7 @@ Formation intensive sur 22 semaines (mars-août 2026) en autodidacte, orientée 
 - - [Investigation Web - Wireshark](semaine_09/write_up_wireshark_investigation_web.md) — 03 mai 2026
 - - [Injection SQL](semaine_09/write_up_injection_SQL.md) — 08 mai 2026
 - - [Cross-Site Scripting (XSS)](semaine_09/write_up_XSS.md) — 09 mai 2026
+- - [Investigation SOC](semaine_09/write_up_SOC_investigation.md) — 13 mai 2026
 
 ## Certifications visées : 
 - CompTIA Security + (prévu : juillet 2026)
