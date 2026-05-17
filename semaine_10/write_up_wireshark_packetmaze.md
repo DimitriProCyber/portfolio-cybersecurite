@@ -341,5 +341,5 @@ Cette investigation m'a permis de consolider la méthodologie d'analyse réseau 
 
 ---
 
-*Write-up rédigé dans le cadre d'une formation cybersécurité 22 semaines (mars–août 2026)*  
+*Write-up rédigé dans le cadre d'une formation cybersécurité*  
 *Portfolio : [github.com/DimitriProCyber/portfolio-cybersecurite](https://github.com/DimitriProCyber/portfolio-cybersecurite)*
