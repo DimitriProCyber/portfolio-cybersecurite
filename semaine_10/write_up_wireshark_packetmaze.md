@@ -9,14 +9,12 @@
 **Outil principal :** Wireshark 4.x  
 **Fichier analysé :** `UNODC-GPC-001-003-JohnDoe-NetworkCapture-2021-04-29.pcapng` (37 Mo, 45 024 paquets)
 
----
 
 ## 1. Contexte
 
 Un serveur interne d'entreprise a été signalé pour une activité réseau inhabituelle, avec plusieurs connexions sortantes vers des IPs externes inconnues. Une analyse initiale suggère une possible exfiltration de données.  
 Le rôle de l'analyste SOC ici est de déterminer la source et le moyen de compromission, ainsi que de confirmer l'exfiltration de données si elle a eu lieu.
 
----
 
 ## 2. Méthodologie
 
@@ -30,7 +28,6 @@ L'investigation suit la méthode SOC en 5 étapes appliquée à l'analyse de cap
 
 Les protocoles en clair sont investigués en priorité car ils permettent de voir directement le contenu des échanges, contrairement aux protocoles chiffrés comme TLS où uniquement les métadonnées sont visibles.
 
----
 
 ## 3. Résultats
 
@@ -51,7 +48,6 @@ Les protocoles en clair sont investigués en priorité car ils permettent de voi
 Le protocole FTP-Data est le protocole qui sera investigué en premier. Dans le contexte d'une investigation sur une exfiltration, un protocole qui permet un échange de données et qui est en clair est une cible prioritaire pour l'investigation, car il permettra peut-être de confirmer rapidement cette hypothèse.  
 Data UDP non identifié signifie que Wireshark ne reconnaît aucun protocole dans ces échanges. Ce trafic mérite également une attention car il aurait pu être instauré manuellement par un attaquant. Cependant, il est difficile à investiguer car sans connaître le protocole utilisé, on ne sait pas comment les données sont structurées et on ne peut pas les interpréter.
 
----
 
 ### 3.2 Vue d'ensemble — Conversations IPv4
 
@@ -70,7 +66,6 @@ Ces IPs ont retenu mon attention pour deux raisons : il y a des volumes d'échan
 Les échanges TLS ne peuvent être lus directement car ils sont chiffrés.  
 Un volume élevé de paquets avec peu de données vers 172.67.162.206 est inhabituel et mérite investigation. Cela peut indiquer des tentatives de connexion répétées ou un comportement anormal.
 
----
 
 ### 3.3 Investigation FTP
 
@@ -97,7 +92,6 @@ La bannière "Hacker FTP service" indique qu'il s'agit d'un serveur non légitim
 
 Le refus de AUTH TLS et AUTH SSL signifie que le serveur n'accepte pas les connexions chiffrées, forçant ainsi une connexion en clair et exposant par conséquent les credentials et le contenu des échanges à toute personne ayant accès au trafic réseau.
 
----
 
 #### Transferts de fichiers
 
@@ -116,7 +110,6 @@ Le refus de AUTH TLS et AUTH SSL signifie que le serveur n'accepte pas les conne
 
 Le fichier le plus suspect est `accountNum.zip` car au vu de son nom il contient probablement des données financières importantes. Le fichier circule de 192.168.1.20 vers 192.168.1.26, ce qui signifie que 192.168.1.26 est probablement la machine depuis laquelle l'attaquant opère.
 
----
 
 #### Structure du serveur FTP — Dossier non-standard
 
@@ -140,7 +133,6 @@ dr-xr-x---  Apr 20 17:53  ftp
 
 Le dossier `ftp` est considéré comme non-standard car il ne s'agit pas d'un dossier natif de Kali. Sa création le 20 avril, 9 jours avant la capture, suggère que l'attaquant s'était introduit depuis au moins 9 jours dans le système au moment de son attaque.
 
----
 
 #### Métadonnées EXIF des images
 
@@ -159,7 +151,6 @@ Les fichiers JPG identifiés dans les transferts FTP sont extraits via `File →
 
 Ces métadonnées permettent d'identifier le modèle de l'appareil utilisé, et parfois sa position GPS. Cela contribue à l'identification de l'attaquant dans le cadre d'une investigation forensique.
 
----
 
 ### 3.4 Investigation DNS
 
@@ -181,7 +172,6 @@ Pour identifier l'adresse IPv6 du serveur DNS (192.168.1.10), on récupère d'ab
 
 Le DNS est analysé même quand le trafic applicatif est chiffré car il permet de voir vers quels domaines la machine a essayé de se connecter. La présence de `dfir.science` (Digital Forensics and Incident Response) dans le trafic DNS est notable car ce domaine, lié à la cybersécurité forensique, peut indiquer que l'attaquant cherchait à obtenir des informations sur les techniques forensiques sachant qu'il allait être investigué, ou qu'il s'agissait d'un point de contact externe.
 
----
 
 ### 3.5 Investigation HTTP
 
@@ -208,7 +198,6 @@ Autres échanges HTTP : SwissSign (certificat racine PKI) et OCSP (vérification
 
 Le code HTTP 301 indique que le serveur redirige de manière permanente vers `https://dfir.science/`, confirmant que `dfir.science` force le HTTPS. Le User-Agent révèle que la requête vient d'un Windows NT 10.0 x64, ce qui confirme le type de machine utilisé.
 
----
 
 ### 3.6 Investigation TLS — Métadonnées des sessions chiffrées
 
@@ -238,7 +227,6 @@ Client Random : 24e92513b97a0348f733d16996929a79be21b0b1400cd7e2862a732ce7775b70
 
 On note le Client Random même si on ne peut pas déchiffrer le trafic, car il pourra dans une investigation future permettre d'identifier les échanges et de les déchiffrer s'il y a une saisie judiciaire. De nombreuses sessions ProtonMail sont suspectes dans ce contexte car il s'agit d'un service de messagerie chiffré de bout en bout permettant aux attaquants d'extraire des données anonymement.
 
----
 
 ### 3.7 Investigation UDP — Trafic non identifié
 
@@ -263,7 +251,6 @@ Volumes faibles — non retenu comme vecteur d'exfiltration.
 Du trafic UDP vers des ports non-standards sans protocole identifié est potentiellement initié par un attaquant, ce qui le rend suspect. Cependant, comme il n'est pas reconnu, il n'est pas lisible ni interprétable, ce qui limite cette piste pour l'investigation.  
 Bien que non flaggées au moment de la capture, des fichiers malveillants ont été associés à 24.39.217.246 lors d'analyses ultérieures sur VirusTotal, renforçant la suspicion sur cette IP.
 
----
 
 ## 4. Tableau des IoCs
 
@@ -289,7 +276,6 @@ Bien que non flaggées au moment de la capture, des fichiers malveillants ont é
 | UDP suspect | 24.39.217.246:54150 | UDP Data | Multiple |
 | Serveur DNS IPv6 | fe80::c80b:adff:feaa:1db7 | DNS | — |
 
----
 
 ## 5. Analyse
 
@@ -318,7 +304,6 @@ Les éléments qui supportent cette hypothèse sont : la création du dossier no
 
 Elle ne peut pas être confirmée à 100% car : le contenu des échanges ProtonMail est chiffré, le trafic UDP vers 24.35.154.189 et 24.39.217.246 est indéchiffrable, et la durée réelle de la compromission nécessiterait des captures ou logs antérieurs au 20 avril.
 
----
 
 ## 6. Recommandations
 
@@ -336,7 +321,6 @@ Elle ne peut pas être confirmée à 100% car : le contenu des échanges ProtonM
 - Appliquer le principe du moindre privilège sur toutes les machines
 - Segmenter le réseau pour limiter les mouvements latéraux en cas de compromission
 
----
 
 ## 7. Conclusion
 
