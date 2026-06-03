@@ -6,7 +6,7 @@ Formation intensive sur 22 semaines (mars-août 2026) en autodidacte, orientée 
 
 - **Réseaux** : TCP/IP, DNS, HTTP/HTTPS, TLS, Wireshark (investigation forensique), Nmap (reconnaissance + scripts NSE vuln), pfSense (déploiement VM, politique whitelist, logs firewall)
 - **SIEM / Analyse** : Splunk SPL avancé (rex, mvindex, dedup, timechart, corrélation multi-sourcetypes), triage SOC N1, détection d'intrusion (baseline, IoC, corrélation), réponse à incident (PICERL)
-- **Sécurité offensive (lab)** : SQLi UNION-based + Blind Boolean, Brute Force (Hydra), Command Injection, reverse shell Python3 (DVWA), Netcat
+- **Sécurité offensive (lab)** : SQLi UNION-based + Blind Boolean, Brute Force (Hydra), Command Injection, reverse shell (DVWA), Netcat
 - **Systèmes** : Linux CLI (grep, permissions, analyse logs Apache), Windows CLI, WSL Ubuntu, Event IDs Windows (4624/4625/4672/4688…)
 - **GRC / Normes** : RGPD (CNIL), ISO 27001 (SMSI), NIS2 (obligations, notification ANSSI)
 - **Environnement lab** : Kali Linux + Metasploitable 2 + pfSense sur VirtualBox (réseau Host-Only isolé)
