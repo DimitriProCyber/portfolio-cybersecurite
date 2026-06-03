@@ -23,22 +23,23 @@ Un pare-feu se doit d'être sur une machine séparée de celles qu'il protège c
 
 ```
 Internet (simulé — pas d'accès réel)
-         |
+                                 |
 [VirtualBox — réseau Host-Only 192.168.56.x]
-    |              |              |
-[Kali eth0]  [pfSense WAN]  [Metasploitable 2]
-192.168.56.100  em0: 192.168.56.105  192.168.56.101
-  (désactivé      |
-  pendant lab)    | pfSense
-                  | fait le routage
-              [pfSense LAN]
-              em1: 192.168.1.1
-                  |
-    [Réseau interne VirtualBox "pfsense-lan"]
-                  |
-             [Kali eth2]
-           192.168.1.100
-           (interface active pendant le lab)
+       |                                |                                  |
+  [Kali eth0]  [pfSense WAN em0]  [Metasploitable 2]
+192.168.56.100  192.168.56.105    192.168.56.101
+ (désactivé)                   |
+                               [pfSense]
+                                routage
+                                     |
+                     [pfSense LAN em1]
+                           192.168.1.1
+                                     |
+     [Réseau interne VirtualBox "pfsense-lan"]
+                                     |
+                             [Kali eth2]
+                          192.168.1.100
+            (interface active pendant le lab)
 ```
 
 ### 2.2 Interfaces réseau
