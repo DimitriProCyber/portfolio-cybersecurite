@@ -25,9 +25,9 @@ Un pare-feu se doit d'être sur une machine séparée de celles qu'il protège c
 Internet (simulé — pas d'accès réel)
                                  |
 [VirtualBox — réseau Host-Only 192.168.56.x]
-       |                                |                                  |
+             |                          |                                  |
   [Kali eth0]  [pfSense WAN em0]  [Metasploitable 2]
-192.168.56.100  192.168.56.105    192.168.56.101
+192.168.56.100  192.168.56.105        192.168.56.101
  (désactivé)                   |
                                  [pfSense]
                                   routage
