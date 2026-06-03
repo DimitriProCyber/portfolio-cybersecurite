@@ -362,4 +362,3 @@ Cet incident est à considérer comme majeur : compromission de l'interface d'ad
 ---
 
 *Write-up rédigé dans le cadre d'une formation cybersécurité*  
-*Objectif : Analyste SOC N1 / Technicien sécurité IT*
