@@ -29,17 +29,17 @@ Internet (simulé — pas d'accès réel)
   [Kali eth0]  [pfSense WAN em0]  [Metasploitable 2]
 192.168.56.100  192.168.56.105    192.168.56.101
  (désactivé)                   |
-                               [pfSense]
-                                routage
-                                     |
-                     [pfSense LAN em1]
-                           192.168.1.1
-                                     |
-     [Réseau interne VirtualBox "pfsense-lan"]
-                                     |
-                             [Kali eth2]
-                          192.168.1.100
-            (interface active pendant le lab)
+                                 [pfSense]
+                                  routage
+                                       |
+                       [pfSense LAN em1]
+                             192.168.1.1
+                                       |
+      [Réseau interne VirtualBox "pfsense-lan"]
+                                       |
+                               [Kali eth2]
+                            192.168.1.100
+             (interface active pendant le lab)
 ```
 
 ### 2.2 Interfaces réseau
