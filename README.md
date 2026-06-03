@@ -2,11 +2,14 @@
 
 Formation intensive sur 22 semaines (mars-août 2026) en autodidacte, orientée vers un emploi en sécurité informatique (SOC N1 / GRC / Technicien Sécurité).
 
-## Compétences en cours d'acquisition : 
-- Réseaux : TCP/IP, DNS, Wireshark, nmap
-- Systèmes : Linux (WSL), Windows CLI, permissions et gestion des utilisateurs
-- Sécurité : phishing, ingénierie sociale, RGPD, ANSSI, analyse de logs
-- Outils : Wireshark, Metasploit, Splunk 
+## Compétences développées
+
+- **Réseaux** : TCP/IP, DNS, HTTP/HTTPS, TLS, Wireshark (investigation forensique), Nmap (reconnaissance + scripts NSE vuln), pfSense (déploiement VM, politique whitelist, logs firewall)
+- **SIEM / Analyse** : Splunk SPL avancé (rex, mvindex, dedup, timechart, corrélation multi-sourcetypes), triage SOC N1, détection d'intrusion (baseline, IoC, corrélation), réponse à incident (PICERL)
+- **Sécurité offensive (lab)** : SQLi UNION-based + Blind Boolean, Brute Force (Hydra), Command Injection, reverse shell Python3 (DVWA), Netcat
+- **Systèmes** : Linux CLI (grep, permissions, analyse logs Apache), Windows CLI, WSL Ubuntu, Event IDs Windows (4624/4625/4672/4688…)
+- **GRC / Normes** : RGPD (CNIL), ISO 27001 (SMSI), NIS2 (obligations, notification ANSSI)
+- **Environnement lab** : Kali Linux + Metasploitable 2 + pfSense sur VirtualBox (réseau Host-Only isolé)
 
 ## Write-ups et exercices pratiques :
 - - [Scan Nmap — Metasploitable 2](semaine_06/write_up_nmap_metasploitable.md) — 12 avril 2026
@@ -22,7 +25,7 @@ Formation intensive sur 22 semaines (mars-août 2026) en autodidacte, orientée 
 - - [Déploiement pfSense et politique de filtrage réseau](semaine_11/introduction_pfSense.md) — 03 juin 2026
 
 ## Certifications visées : 
-- CompTIA Security + (prévu : juillet 2026)
+- **CompTIA Security + SY0-701** (prévu : juillet 2026)
 
 ## Contact :
-Hauts-deFrance - Disponible pour missions et opportunités en cybersécurité
+Hauts-de-France - Disponible pour missions et opportunités en cybersécurité
