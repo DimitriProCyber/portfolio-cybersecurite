@@ -22,7 +22,7 @@ Formation intensive sur 22 semaines (mars-août 2026) en autodidacte, orientée 
 - - [Investigation réseau PacketMaze - Wireshark](semaine_10/write_up_wireshark_packetmaze.md)  — 16 mai 2026
 - - [Investigation SOC BOTSv1 - 2ème scénario](semaine_10/write_up_SOC_Investigation_Cerber.md) — 25 mai 2026
 - - [DVWA - Brute Force et Command Injection](semaine_10/write_up_DVWA_Decouverte.md) — 29 mai 2026
-- - [Déploiement pfSense et politique de filtrage réseau](semaine_11/introduction_pfSense.md) — 03 juin 2026
+- - [Déploiement pfSense et politique de filtrage réseau](semaine_11/Introduction_pfSense.md) — 03 juin 2026
 
 ## Certifications visées : 
 - **CompTIA Security + SY0-701** (prévu : juillet 2026)
