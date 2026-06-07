@@ -4,7 +4,6 @@
 
 **Environnement :** Home lab VirtualBox · pfSense CE 2.8.1 · Kali Linux · Debian 13 "Trixie"  
 **Objectif :** Déployer et sécuriser une infrastructure réseau trois zones (LAN / DMZ / WAN) avec pfSense CE selon les bonnes pratiques ANSSI, en partant de zéro, dans un contexte PME simulé.
-
 **Niveau :** Niveau 2 — reconstruction from scratch  
 
 
