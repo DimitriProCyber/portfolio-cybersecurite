@@ -15,7 +15,7 @@ L'entreprise souhaite également exposer un site vitrine sur internet, hébergé
 
 **Mission :** déployer une architecture réseau sécurisée from scratch, segmentée en trois zones distinctes, selon les bonnes pratiques ANSSI, et valider chaque mesure de sécurité par des tests concrets.
 
-La segmentation réseau apporte une meilleure protection en cas d'intrusion. Chaque sous-réseau est protégé des autres car le trafic y est filtré : on autorise que ce qui est nécessaire (principe du moindre privilège), le reste étant bloqué. Ca limite les possibilité d'un attaquant de se propager ou d'extraire des données, et les tentatives bloquées sont enregistrées ce qui permet de documenter l'attaque.
+La segmentation réseau apporte une meilleure protection en cas d'intrusion. Chaque sous-réseau est protégé des autres car le trafic y est filtré : on autorise que ce qui est nécessaire (principe du moindre privilège), le reste étant bloqué. Cela limite les possibilités d'un attaquant de se propager ou d'extraire des données, et les tentatives bloquées sont enregistrées ce qui permet de documenter l'attaque.
 
 
 ## 2. Architecture réseau
@@ -92,7 +92,7 @@ Une politique de filtrage peut rapidement contenir plusieurs règles ciblant le 
 
 ### 4.2 Règles LAN (dans l'ordre d'évaluation)
 
-L'ordre dans lequel les règles sont placées est critique car pfSense les évaluent de haut en bas et s'arrête à la première règle qui correspond au paquet. 
+L'ordre dans lequel les règles sont placées est critique car pfSense les évalue de haut en bas et s'arrête à la première règle qui correspond au paquet.
 
 | Priorité | Action | Source | Destination | Port | Description | Justification |
 |----------|--------|--------|-------------|------|-------------|---------------|
@@ -115,7 +115,7 @@ Ici par exemple, il est impératif de placer la règle 3 qui bloque l'accès aux
 | 3 | Block | DMZ subnets | LAN subnets | Any | Block DMZ to LAN | Interdit tout mouvement latéral vers le réseau interne |
 | 4 | Block | DMZ subnets | Any | Any | Block DMZ to any | Deny all — bloque tout le reste |
 
-Bloquer le mouvement latéral de DMZ vers LAN est le point le plus critique de la segmentation : c'est ce qui empêche un intrus de se propager vers le réseau interne (LAN) en cas de compromission du serveur web. Sans cette règle, placer le serveur en DMZ n'apporte aucune réelle protection.
+Bloquer le mouvement latéral de DMZ vers LAN est le point le plus critique de la segmentation : c'est ce qui empêche un intrus de se propager vers le réseau interne (LAN) en cas de compromission du serveur web. Sans cette règle, placer le serveur en DMZ n'apporte aucune protection réelle.
 
 ### 4.4 Réservation DHCP statique — debian-dmz
 
@@ -204,13 +204,13 @@ La lecture de ces logs peut permettre d'affirmer qu'il s'agit d'un scan automati
 
 ### 6.2 Blocage mouvement latéral
 
-Le test de mouvement latéral nous a montré le bon fonctionnement de la règle "Block DMZ to LAN" via 2 indicateurs : timeout de la commande et signature log. Les logs ont affichés une ligne présentant une action "Block" venant de l'interface DMZ, intercepté par la règle "Block DMZ to LAN", venant de 192.168.2.10 vers 192.168.1.100 port 22 en TCP:S.
+Le test de mouvement latéral nous a montré le bon fonctionnement de la règle "Block DMZ to LAN" via 2 indicateurs : timeout de la commande et signature log. Les logs ont affiché une ligne présentant une action "Block" venant de l'interface DMZ, intercepté par la règle "Block DMZ to LAN", venant de 192.168.2.10 vers 192.168.1.100 port 22 en TCP:S.
 
 ### 6.3 Bruit DNS éliminé
 
 Avant la règle "Block DMZ DNS noise - no log", les logs montraient un flux continu de requêtes UDP port 53 depuis debian-dmz vers 192.168.2.1. Ce trafic correspondait aux requêtes DNS automatiques du système d'exploitation, sans rapport avec une activité malveillante.
 
-Debian-dmz générait des requêtes UDP par paires à intervalles réguliers, observées toutes les 5 secondes dans les logs, ce qui représentait un volume conséquent d'information. Ce type de flux important, peut d'une part, prendre de la place de stockage sans valeur analytique sur du long terme, mais peut surtout noyer des informations importantes pour un analyste. En supprimant ce bruit, on ne garde dans les logs que ce qui pourrait être pertinent.
+Debian-dmz générait des requêtes UDP par paires à intervalles réguliers, observées toutes les 5 secondes dans les logs, ce qui représentait un volume conséquent d'information. Ce type de flux important peut d'une part prendre de la place de stockage sans valeur analytique sur du long terme, mais peut surtout noyer des informations importantes pour un analyste. En supprimant ce bruit, on ne garde dans les logs que ce qui pourrait être pertinent.
 
 
 ## 7. Erreurs identifiées et corrigées
@@ -224,7 +224,7 @@ Debian-dmz générait des requêtes UDP par paires à intervalles réguliers, ob
 ```bash
 # Étape 1 — vérifier que Kali envoie bien le paquet
 ip route get 192.168.56.105
-# Résultat : via eth0, src 192.168.56.100 
+# Résultat : via eth0, src 192.168.56.100
 
 # Étape 2 — isoler le problème : tester LAN→DMZ directement (sans NAT)
 curl http://192.168.2.10
@@ -233,21 +233,21 @@ curl http://192.168.2.10
 # Étape 3 — vérifier qu'Apache écoute
 ss -tlnp | grep 80
 # ss : outil d'affichage des connexions et sockets réseaux ; -t : socket TCP uniquement ; -l : sockets en écoute uniquement ; -n : affiche les numéros de ports ; -p : affiche le processus associé à chaque socket
-# Résultat : *:80 apache2 
+# Résultat : *:80 apache2
 
 # Étape 4 — vérifier la table de routage de debian-dmz
 ip route show
 # Résultat : PAS de route par défaut → PROBLÈME TROUVÉ
 ```
 
-**Cause :** Lors de l'installation de Debian, une interface réseau NAT pour le téléchargement de l'OS avait été ajoutée. Un fois l'installation terminée, elle a été retirée, mais Debian ne l'a pas pris en compte dans ses paramètres. Le fichier /etc/network/interfaces de debian-dmz référençait le mauvais nom d'interface (enp0s8 au lieu de enp0s3). Après correction manuelle du fichier, l'interface a été montée sans passer par le processus DHCP complet : debian-dmz n'a donc jamais reçu de route par défaut de pfSense.
+**Cause :** Lors de l'installation de Debian, une interface réseau NAT pour le téléchargement de l'OS avait été ajoutée. Une fois l'installation terminée, elle a été retirée, mais Debian ne l'a pas pris en compte dans ses paramètres. Le fichier /etc/network/interfaces de debian-dmz référençait le mauvais nom d'interface (enp0s8 au lieu de enp0s3). Après correction manuelle du fichier, l'interface a été montée sans passer par le processus DHCP complet : debian-dmz n'a donc jamais reçu de route par défaut de pfSense.
 
 **Résolution :**
 ```bash
 ip route add default via 192.168.2.1
 ```
 
-La table de routage permet d'informer une machine sur ou envoyer un paquet quand elle cherche à joindre une destination en particulier. Sans ces informations, les paquets restent bloqués, ne sachant pas ou ils doivent être envoyés. Dans notre cas, la réponse ne revenant jamais, Kali atteint le délai d'expiration de la connexion (timeout) car aucune réponse ne revient, et ne sait pas si son paquet a été perdu ou si sa connexion a été refusée.
+La table de routage permet d'informer une machine sur où envoyer un paquet quand elle cherche à joindre une destination en particulier. Sans ces informations, les paquets restent bloqués, ne sachant pas où ils doivent être envoyés. Dans notre cas, Kali atteint le délai d'expiration de la connexion (timeout) et ne sait pas si son paquet a été perdu ou si sa connexion a été refusée.
 
 ### Erreur 2 — Source/Destination inversées sur règle Allow Web
 
@@ -276,17 +276,23 @@ La table de routage permet d'informer une machine sur ou envoyer un paquet quand
 | Haute | Authentification par clé SSH sur pfSense | Remplace l'authentification par mot de passe, plus robuste contre le brute force |
 | Moyenne | Syslog distant (ex: Graylog) | Les logs locaux pfSense sont limités à 500 entrées — insuffisant pour une investigation sérieuse |
 | Moyenne | Mises à jour automatiques pfSense | Correction des vulnérabilités sans intervention manuelle |
-| Basse | Vérification de la persistance de la route par défaut sur debian-dmz | La route ajoutée manuellement doit être vérifiée après redémarrage |
 
-📝 *Ajouter 1-2 recommandations spécifiques au contexte NordLogistique (PME logistique, 45 employés) — par exemple : segmentation WiFi invités, politique de mots de passe, sensibilisation.*
+Dans le but de renforcer la protection informatique de l'entreprise, il serait judicieux de mettre en place par exemple une politique de mots de passe forts (recommandation ANSSI : 12 caractères alpha-numériques avec au moins une majuscule et un caractère spécial) à changer régulièrement. Une politique de sensibilisation de bonnes pratiques pourrait être une bonne mesure préventive. Enfin, une segmentation du WiFi avec un réseau pour le personnel et un autre séparé pour les visiteurs est une mesure à envisager également.
 
----
 
 ## 9. Conclusion
 
-📝 *3-4 phrases : ce que cette infrastructure apporte concrètement à NordLogistique par rapport à leur situation initiale. Mentionner : isolation du serveur web, blocage des communications C2, visibilité via les logs, accès administration restreint. Conclure sur ce que ce lab démontre en termes de compétences.*
+La politique de segmentation mise en place apporte un changement complet par rapport à l'architecture précédente : isolation du serveur web par rapport au réseau interne de l'entreprise, blocage des communications vers des serveurs C2 externes réduisant l'impact en cas de compromission, tracking du trafic suspect via les logs et accès administrateur du pare-feu restreint à un poste unique. Cette politique démontre une montée en niveau de la part de l'entreprise sur sa protection de données via l'implémentation de bonnes pratiques.
+
+Ce lab m'a permis de me familiariser avec la notion de pare-feu, de comprendre son importance et de mettre en pratique différentes compétences utiles dans le monde professionnel :
+
+- Déploiement d'une infrastructure réseau de zéro.
+- Concevoir et appliquer une politique de filtrage de base et cohérente.
+- Diagnostiquer un problème réseau grâce à une méthode structurée (OSI bottom-up).
+- Identifier et corriger des erreurs de configuration.
+
+Il reste bien évidemment énormément de matière pour approfondir et me perfectionner, cependant cet exercice a été une bonne aide afin de poser différentes bases, importantes à maîtriser. Il a su également poser quelques challenges qui m'ont appris des choses qui n'étaient pas prévues au programme, mais qui se sont révélées très formatrices (j'ai pu découvrir la méthode OSI bottom-up qui me servira sûrement plus d'une fois par la suite).
 
 ---
 
-*Write-up rédigé dans le cadre d'une formation cybersécurité autonome — home lab VirtualBox, juin 2026.*  
-*Portfolio complet : [github.com/DimitriProCyber/portfolio-cybersecurite](https://github.com/DimitriProCyber/portfolio-cybersecurite)*
+*Write-up rédigé dans le cadre d'une formation cybersécurité*
