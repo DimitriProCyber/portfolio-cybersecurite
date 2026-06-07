@@ -8,10 +8,10 @@ Disponible en Hauts-de-France — ouvert aux opportunités en **technicien sécu
 
 ## Compétences démontrées en lab
 
-| Domaine | Démontré en lab |
+| Domaine | Réalisations |
 |---|---|
 | SIEM / Splunk | Investigation complète sur dataset BOTS v1 : SPL (rex, timechart, dedup), corrélation multi-sources, attribution APT, analyse ransomware Cerber |
-| Sécurité réseau | Déploiement pfSense CE architecture trois zones WAN/LAN/DMZ, NAT Port Forwarding, filtrage stateful, hardening WebGUI |
+| Sécurité réseau | Déploiement pfSense CE en architecture trois zones WAN/LAN/DMZ, NAT Port Forwarding, filtrage stateful, hardening WebGUI |
 | Analyse réseau | Analyse de captures pcap, extraction de credentials, reconstruction de kill chain, enrichissement VirusTotal |
 | Sécurité applicative | SQLi UNION-based et Blind Boolean sur DVWA, brute force Hydra, command injection, reverse shell en environnement contrôlé |
 | Systèmes | Installation et administration de base Kali Linux, Debian 13, Windows CLI — lab multi-VM sous VirtualBox |
