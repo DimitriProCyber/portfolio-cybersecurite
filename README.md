@@ -8,7 +8,7 @@ Disponible en Hauts-de-France — ouvert aux opportunités en **technicien sécu
 
 ## Compétences démontrées en lab
 
-| Domaine | Ce qui a été fait |
+| Domaine | Démontré en lab |
 |---|---|
 | SIEM / Splunk | Investigation complète sur dataset BOTS v1 : SPL (rex, timechart, dedup), corrélation multi-sources, attribution APT, analyse ransomware Cerber |
 | Sécurité réseau | Déploiement pfSense CE architecture trois zones WAN/LAN/DMZ, NAT Port Forwarding, filtrage stateful, hardening WebGUI |
