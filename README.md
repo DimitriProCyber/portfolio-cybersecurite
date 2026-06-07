@@ -26,18 +26,18 @@ Structure de chaque write-up : contexte métier → méthodologie → résultats
 
 | Lab | Date |
 |---|---|
-| [pfSense N2 — Architecture trois zones NordLogistique (reconstruction from scratch)](semaine_12/write_up_pfsense_segmentation_reseau.md) | juin 2026 |
-| [Déploiement pfSense et politique de filtrage réseau](semaine_11/Introduction_pfSense.md) | juin 2026 |
-| [DVWA - Brute Force et Command Injection](semaine_10/write_up_DVWA_Decouverte.md) | mai 2026 |
-| [Investigation SOC BOTSv1 - Ransomware Cerber](semaine_10/write_up_SOC_Investigation_Cerber.md) | mai 2026 |
-| [Investigation réseau PacketMaze - Wireshark](semaine_10/write_up_wireshark_packetmaze.md) | mai 2026 |
-| [Investigation SOC BOTSv1 - APT Po1s0n1vy](semaine_09/write_up_SOC_investigation.md) | mai 2026 |
-| [Cross-Site Scripting (XSS)](semaine_09/write_up_XSS.md) | mai 2026 |
-| [Injection SQL](semaine_09/write_up_injection_SQL.md) | mai 2026 |
-| [Investigation Web - Wireshark](semaine_09/write_up_wireshark_investigation_web.md) | mai 2026 |
-| [Lab Splunk — Analyse de logs Windows](semaine_08/write_up_splunk.md) | avril 2026 |
-| [Scan Nmap — Vulnérabilités](semaine_07/write_up_nmap_vuln.md) | avril 2026 |
-| [Scan Nmap — Metasploitable 2](semaine_06/write_up_nmap_metasploitable.md) | avril 2026 |
+| [pfSense N2 — Architecture trois zones NordLogistique (reconstruction from scratch)](semaine_12/write_up_pfsense_segmentation_reseau.md) | 06 juin 2026 |
+| [Déploiement pfSense et politique de filtrage réseau](semaine_11/Introduction_pfSense.md) | 03 juin 2026 |
+| [DVWA - Brute Force et Command Injection](semaine_10/write_up_DVWA_Decouverte.md) | 29 mai 2026 |
+| [Investigation SOC BOTSv1 - Ransomware Cerber](semaine_10/write_up_SOC_Investigation_Cerber.md) | 25 mai 2026 |
+| [Investigation réseau PacketMaze - Wireshark](semaine_10/write_up_wireshark_packetmaze.md) | 16 mai 2026 |
+| [Investigation SOC BOTSv1 - APT Po1s0n1vy](semaine_09/write_up_SOC_investigation.md) | 13 mai 2026 |
+| [Cross-Site Scripting (XSS)](semaine_09/write_up_XSS.md) | 09 mai 2026 |
+| [Injection SQL](semaine_09/write_up_injection_SQL.md) | 08 mai 2026 |
+| [Investigation Web - Wireshark](semaine_09/write_up_wireshark_investigation_web.md) | 03 mai 2026 |
+| [Lab Splunk — Analyse de logs Windows](semaine_08/write_up_splunk.md) | 23 avril 2026 |
+| [Scan Nmap — Vulnérabilités](semaine_07/write_up_nmap_vuln.md) | 19 avril 2026 |
+| [Scan Nmap — Metasploitable 2](semaine_06/write_up_nmap_metasploitable.md) | 12 avril 2026 |
 
 ---
 
