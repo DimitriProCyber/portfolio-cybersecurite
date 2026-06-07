@@ -115,7 +115,7 @@ Ici par exemple, il est impératif de placer la règle 3 qui bloque l'accès aux
 | 3 | Block | DMZ subnets | LAN subnets | Any | Block DMZ to LAN | Interdit tout mouvement latéral vers le réseau interne |
 | 4 | Block | DMZ subnets | Any | Any | Block DMZ to any | Deny all — bloque tout le reste |
 
-📝 *Expliquer pourquoi bloquer le mouvement latéral DMZ → LAN est critique : que se passe-t-il si un attaquant compromet le serveur web ?*
+Bloquer le mouvement latéral de DMZ vers LAN est le point le plus critique de la segmentation : c'est ce qui empêche un intrus de se propager vers le réseau interne (LAN) en cas de compromission du serveur web. Sans cette règle, placer le serveur en DMZ n'apporte aucune réelle protection.
 
 ### 4.4 Réservation DHCP statique — debian-dmz
 
@@ -137,6 +137,8 @@ Requête externe → 192.168.56.105:80 (WAN pfSense)
               192.168.2.10:80 (debian-dmz Apache)
 ```
 
+La configuration du NAT Port Forwarding se fait dans pfSense via Firewall → NAT → Port Forward. Lors de la création de la règle, pfSense propose de créer automatiquement la règle firewall WAN associée via l'option "Add associated filter rule", évitant ainsi de devoir créer manuellement deux règles distinctes.
+
 | Paramètre | Valeur |
 |-----------|--------|
 | Interface | WAN |
@@ -146,40 +148,40 @@ Requête externe → 192.168.56.105:80 (WAN pfSense)
 
 ### 4.6 Hardening WebGUI pfSense
 
-Trois mesures appliquées pour réduire la surface d'attaque de pfSense lui-même :
+L'infrastructure réseau est maintenant opérationnelle, mais pfSense lui-même représente une surface d'attaque : si un attaquant accède à l'interface d'administration, il peut modifier toutes les règles firewall et compromettre l'ensemble de l'infrastructure. Le hardening consiste à réduire cette surface d'attaque en limitant les conditions dans lesquelles pfSense est accessible. Avec cet objectif en tête, on applique les 3 mesures suivantes :
 
 **Mesure 1 — Port personnalisé**  
-Port WebGUI déplacé de 443 vers **8443**. Réduit le risque d'attaques opportunistes automatisées qui testent les ports standards. Note : cette mesure relève de la *security through obscurity* — elle réduit le bruit mais ne remplace pas une règle firewall.
+Le port de la WebGUI est modifié via System → Advanced → Admin Access, champ "TCP port". Le port par défaut (443) est remplacé par **8443**. La case "Disable webConfigurator redirect rule" est également cochée : sans cette étape, pfSense continuerait à accepter les connexions sur 80 et 443, rendant le changement de port inefficace. Cette mesure relève de la *security through obscurity* : elle réduit le bruit des attaques opportunistes automatisées qui testent les ports standards, mais ne remplace pas une règle firewall.
 
 **Mesure 2 — Accès restreint à une IP**  
-La règle Anti-Lockout automatique a été désactivée après création d'une règle manuelle autorisant uniquement 192.168.1.100 (poste admin Kali) à accéder à la WebGUI sur le port 8443. Tout autre poste du LAN est bloqué.
+Par défaut, pfSense applique une règle "Anti-Lockout" automatique qui garantit l'accès à la WebGUI depuis le LAN, quelle que soit la politique de filtrage en place. Pour restreindre l'accès à un seul poste, il faut la désactiver après avoir créé manuellement une règle firewall LAN autorisant 192.168.1.100 (poste admin Kali) vers 192.168.1.1 port 8443. Sans cette précaution, désactiver l'Anti-Lockout coupe immédiatement l'accès à pfSense.
 
-> **Ordre de manipulation critique :** créer la règle d'autorisation AVANT de désactiver l'Anti-Lockout, sous peine de se couper l'accès à pfSense.
+La désactivation se fait via System → Advanced → Admin Access, case "Disable webConfigurator anti-lockout rule".
 
 **Mesure 3 — Vérification mDNS/Avahi**  
-Le package Avahi (implémentation mDNS sur pfSense) n'est pas installé par défaut. Vérification effectuée via System → Package Manager → Installed Packages : aucun package installé. Surface d'attaque nulle sur ce vecteur.
+Le protocole mDNS (Multicast DNS) permet à un appareil d'annoncer automatiquement ses services aux autres machines du réseau local, sans configuration manuelle. Sur pfSense CE, il est implémenté via le package Avahi. Un pare-feu n'a aucun service à annoncer sur le réseau — laisser mDNS actif révèlerait des informations sur la machine à quiconque écoute. Le package Avahi existe pour des cas d'usage légitimes — notamment la réflexion mDNS entre zones réseau segmentées, permettant par exemple à une imprimante sur le LAN d'être découverte depuis un VLAN invité. Dans le contexte NordLogistique, ce besoin n'existe pas et le package ne doit pas être installé.
 
----
+Vérification effectuée via System → Package Manager → Installed Packages : le package Avahi n'est pas installé. Surface d'attaque nulle sur ce vecteur.
+
 
 ## 5. Résultats des tests de validation
 
 | Test | Méthode | Résultat attendu | Résultat obtenu |
 |------|---------|-----------------|-----------------|
-| Accès HTTP via NAT (internet → Apache) | `curl http://192.168.56.105` depuis Kali eth0 | Page Apache Debian | ✅ Page Apache obtenue |
-| Accès HTTP LAN → DMZ direct | `curl http://192.168.2.10` depuis Kali eth2 | Page Apache Debian | ✅ Page Apache obtenue |
-| Mouvement latéral DMZ → LAN | `ssh webadmin@192.168.1.100` depuis debian-dmz | Timeout | ✅ Connection timed out |
-| Port C2 bloqué | `curl --interface eth2 http://192.168.56.105:9001` | Bloqué | ⚠️ Voir analyse ci-dessous |
-| Signature scan Nmap dans logs | `nmap -sS 192.168.56.105` depuis Kali eth0 | TCP:S en rafale dans logs WAN | ✅ Signature visible |
-| WebGUI accessible uniquement sur 8443 | `curl -k https://192.168.1.1:8443` | Page pfSense | ✅ Accès confirmé |
-| DNS LAN → pfSense | `nslookup google.com 192.168.1.1` | Requête atteint pfSense | ✅ SERVFAIL reçu (normal sans internet) |
+| Accès HTTP via NAT (internet → Apache) | `curl http://192.168.56.105` depuis Kali eth0 | Page Apache Debian | Page Apache obtenue |
+| Accès HTTP LAN → DMZ direct | `curl http://192.168.2.10` depuis Kali eth2 | Page Apache Debian | Page Apache obtenue |
+| Mouvement latéral DMZ → LAN | `ssh webadmin@192.168.1.100` depuis debian-dmz | Timeout | Connection timed out |
+| Port C2 bloqué | `curl --interface eth2 http://192.168.56.105:9001` | Bloqué | Voir analyse ci-dessous |
+| Signature scan Nmap dans logs | `nmap -sS 192.168.56.105` depuis Kali eth0 | TCP:S en rafale dans logs WAN | Signature visible |
+| WebGUI accessible uniquement sur 8443 | `curl -k https://192.168.1.1:8443` | Page pfSense | Accès confirmé |
+| DNS LAN → pfSense | `nslookup google.com 192.168.1.1` | Requête atteint pfSense | SERVFAIL reçu (normal sans internet) |
 
-### Analyse — Test port C2 non conclusif
+### Analyse — Test du port C2 non conclusif
 
-La règle "Block LAN to WAN C2 Ports" utilise un invert match sur RFC1918 pour cibler uniquement les IPs publiques. Dans ce lab, l'IP WAN de pfSense (192.168.56.105) est une IP privée — la règle ne s'applique donc pas à ce trafic. Le résultat "failed to connect" obtenu s'explique par l'absence de service sur le port 9001, pas par le firewall.
+La règle "Block LAN to WAN C2 Ports" utilise un invert match sur RFC1918 pour cibler uniquement les IPs publiques. Dans ce lab, l'IP WAN de pfSense (192.168.56.105) est une IP privée : la règle ne s'applique donc pas à ce trafic. Le résultat "failed to connect" obtenu s'explique par l'absence de service sur le port 9001, pas par le firewall.
 
 **Limite du lab :** sans accès internet réel ou simulation d'IP publique, ce test ne peut pas être conclusif. En production, le test serait effectué vers une IP publique réelle.
 
----
 
 ## 6. Analyse des logs firewall
 
@@ -188,29 +190,28 @@ La règle "Block LAN to WAN C2 Ports" utilise un invert match sur RFC1918 pour c
 Extrait des logs lors du scan `nmap -sS 192.168.56.105` :
 
 ```
-Action  Interface  Règle                        Source                  Destination              Protocol
-Block   WAN        Default deny rule IPv4       192.168.56.100:64130    192.168.56.105:1309      TCP:S
-Block   WAN        Default deny rule IPv4       192.168.56.100:64130    192.168.56.105:9944      TCP:S
-Block   WAN        Default deny rule IPv4       192.168.56.100:64130    192.168.56.105:5989      TCP:S
-Block   WAN        Default deny rule IPv4       192.168.56.100:64132    192.168.56.105:1812      TCP:S
+Action  Interface    Règle                                      Source                               Destination                       Protocol
+Block    WAN          Default deny rule IPv4       192.168.56.100:64130    192.168.56.105:1309      TCP:S
+Block    WAN          Default deny rule IPv4       192.168.56.100:64130    192.168.56.105:9944      TCP:S
+Block    WAN          Default deny rule IPv4       192.168.56.100:64130    192.168.56.105:5989      TCP:S
+Block    WAN          Default deny rule IPv4       192.168.56.100:64132    192.168.56.105:1812        TCP:S
 [... ~999 entrées similaires en moins d'une seconde ...]
 ```
 
 **Trois indicateurs caractéristiques d'un scan automatisé :**
 
-📝 *Lister et expliquer les 3 signatures : volumétrie (grand nombre de paquets en très peu de temps), ports variés et non séquentiels, protocole TCP:S (SYN sans ACK — le handshake n'est jamais complété).*
+La lecture de ces logs peut permettre d'affirmer qu'il s'agit d'un scan automatisé car dans un premier temps on voit un volume de tentative de connexion qui n'est pas humainement possible (999 en 7 secondes environ), ensuite lorsqu'on regarde les destinations on se rend compte que chaque tentative se fait sur un port différent et les numéros de ports testés paraissent aléatoires (aucune séquence clairement visible). Enfin, les messages envoyés ne sont que des paquets SYN, qui tentent d'initier une connexion, probablement dans le but de voir si le port est ouvert. Si le port répondait de manière favorable, le handshake ne serait jamais complété.
 
 ### 6.2 Blocage mouvement latéral
 
-📝 *Décrire en 2-3 phrases ce qu'on observerait dans les logs si on avait activé le logging sur la règle "Block DMZ to LAN" lors du test SSH depuis debian-dmz.*
+Le test de mouvement latéral nous a montré le bon fonctionnement de la règle "Block DMZ to LAN" via 2 indicateurs : timeout de la commande et signature log. Les logs ont affichés une ligne présentant une action "Block" venant de l'interface DMZ, intercepté par la règle "Block DMZ to LAN", venant de 192.168.2.10 vers 192.168.1.100 port 22 en TCP:S.
 
 ### 6.3 Bruit DNS éliminé
 
 Avant la règle "Block DMZ DNS noise - no log", les logs montraient un flux continu de requêtes UDP port 53 depuis debian-dmz vers 192.168.2.1. Ce trafic correspondait aux requêtes DNS automatiques du système d'exploitation, sans rapport avec une activité malveillante.
 
-📝 *Expliquer pourquoi ce bruit est problématique pour un analyste SOC, et comment la règle sans logging résout le problème sans perdre de visibilité sur les vraies menaces.*
+Debian-dmz générait des requêtes UDP par paires à intervalles réguliers, observées toutes les 5 secondes dans les logs, ce qui représentait un volume conséquent d'information. Ce type de flux important, peut d'une part, prendre de la place de stockage sans valeur analytique sur du long terme, mais peut surtout noyer des informations importantes pour un analyste. En supprimant ce bruit, on ne garde dans les logs que ce qui pourrait être pertinent.
 
----
 
 ## 7. Erreurs identifiées et corrigées
 
@@ -223,29 +224,30 @@ Avant la règle "Block DMZ DNS noise - no log", les logs montraient un flux cont
 ```bash
 # Étape 1 — vérifier que Kali envoie bien le paquet
 ip route get 192.168.56.105
-# → via eth0, src 192.168.56.100 ✓
+# Résultat : via eth0, src 192.168.56.100 
 
 # Étape 2 — isoler le problème : tester LAN→DMZ directement (sans NAT)
 curl http://192.168.2.10
-# → timeout aussi → problème côté debian-dmz, pas dans le NAT
+# Résultat : timeout aussi → problème côté debian-dmz, pas dans le NAT
 
 # Étape 3 — vérifier qu'Apache écoute
 ss -tlnp | grep 80
-# → *:80 apache2 ✓
+# ss : outil d'affichage des connexions et sockets réseaux ; -t : socket TCP uniquement ; -l : sockets en écoute uniquement ; -n : affiche les numéros de ports ; -p : affiche le processus associé à chaque socket
+# Résultat : *:80 apache2 
 
 # Étape 4 — vérifier la table de routage de debian-dmz
 ip route show
-# → PAS de route par défaut ← PROBLÈME TROUVÉ
+# Résultat : PAS de route par défaut → PROBLÈME TROUVÉ
 ```
 
-**Cause :** lors du montage manuel de l'interface réseau, le bail DHCP n'avait pas été obtenu correctement — debian-dmz recevait les paquets mais ne savait pas vers où renvoyer les réponses.
+**Cause :** Lors de l'installation de Debian, une interface réseau NAT pour le téléchargement de l'OS avait été ajoutée. Un fois l'installation terminée, elle a été retirée, mais Debian ne l'a pas pris en compte dans ses paramètres. Le fichier /etc/network/interfaces de debian-dmz référençait le mauvais nom d'interface (enp0s8 au lieu de enp0s3). Après correction manuelle du fichier, l'interface a été montée sans passer par le processus DHCP complet : debian-dmz n'a donc jamais reçu de route par défaut de pfSense.
 
 **Résolution :**
 ```bash
 ip route add default via 192.168.2.1
 ```
 
-📝 *Expliquer en une phrase le concept de "route retour" : pourquoi un serveur qui reçoit un paquet doit savoir comment répondre, et ce qui se passe si la route manque (timeout côté client, pas "connexion refusée").*
+La table de routage permet d'informer une machine sur ou envoyer un paquet quand elle cherche à joindre une destination en particulier. Sans ces informations, les paquets restent bloqués, ne sachant pas ou ils doivent être envoyés. Dans notre cas, la réponse ne revenant jamais, Kali atteint le délai d'expiration de la connexion (timeout) car aucune réponse ne revient, et ne sait pas si son paquet a été perdu ou si sa connexion a été refusée.
 
 ### Erreur 2 — Source/Destination inversées sur règle Allow Web
 
