@@ -1,32 +1,56 @@
-# Portfolio Cybersecurite | Dimitri
+# Portfolio Cybersécurité — Dimitri
 
-Formation intensive sur 22 semaines (mars-août 2026) en autodidacte, orientée vers un emploi en sécurité informatique (SOC N1 / GRC / Technicien Sécurité).
+Technicien issu d'un environnement technique exigeant en reconversion active vers la cybersécurité.  
+Formation intensive autodidacte de 22 semaines (mars–août 2026) orientée pratique : chaque compétence est documentée par un lab réel et un write-up structuré.  
+Disponible en Hauts-de-France — ouvert aux opportunités en **technicien sécurité IT**, **administrateur systèmes & réseaux junior** et  **analyste SOC N1**.
 
-## Compétences développées
+---
 
-- **Réseaux** : TCP/IP, DNS, HTTP/HTTPS, TLS, Wireshark (investigation forensique), Nmap (reconnaissance + scripts NSE vuln), pfSense (déploiement VM, politique whitelist, logs firewall)
-- **SIEM / Analyse** : Splunk SPL avancé (rex, mvindex, dedup, timechart, corrélation multi-sourcetypes), triage SOC N1, détection d'intrusion (baseline, IoC, corrélation), réponse à incident (PICERL)
-- **Sécurité offensive (lab)** : SQLi UNION-based + Blind Boolean, Brute Force (Hydra), Command Injection, reverse shell (DVWA), Netcat
-- **Systèmes** : Linux CLI (grep, permissions, analyse logs Apache), Windows CLI, WSL Ubuntu, Event IDs Windows (4624/4625/4672/4688…)
-- **GRC / Normes** : RGPD (CNIL), ISO 27001 (SMSI), NIS2 (obligations, notification ANSSI)
-- **Environnement lab** : Kali Linux + Metasploitable 2 + pfSense sur VirtualBox (réseau Host-Only isolé)
+## Compétences démontrées en lab
 
-## Write-ups et exercices pratiques :
-- - [Scan Nmap — Metasploitable 2](semaine_06/write_up_nmap_metasploitable.md) — 12 avril 2026
-- - [Scan Nmap — Vulnérabilités](semaine_07/write_up_nmap_vuln.md) — 19 avril 2026
-- - [Lab Splunk](semaine_08/write_up_splunk.md) — 23 avril 2026
-- - [Investigation Web - Wireshark](semaine_09/write_up_wireshark_investigation_web.md) — 03 mai 2026
-- - [Injection SQL](semaine_09/write_up_injection_SQL.md) — 08 mai 2026
-- - [Cross-Site Scripting (XSS)](semaine_09/write_up_XSS.md) — 09 mai 2026
-- - [Investigation SOC BOTSv1 - 1er scénario](semaine_09/write_up_SOC_investigation.md) — 13 mai 2026
-- - [Investigation réseau PacketMaze - Wireshark](semaine_10/write_up_wireshark_packetmaze.md)  — 16 mai 2026
-- - [Investigation SOC BOTSv1 - 2ème scénario](semaine_10/write_up_SOC_Investigation_Cerber.md) — 25 mai 2026
-- - [DVWA - Brute Force et Command Injection](semaine_10/write_up_DVWA_Decouverte.md) — 29 mai 2026
-- - [Déploiement pfSense et politique de filtrage réseau](semaine_11/Introduction_pfSense.md) — 03 juin 2026
-- - [Déploiement et sécurisation d'une infrastructure réseau en trois zones avec pfSense](semaine_12/write_up_pfsense_segmentation_reseau.md) — 06 juin 2026
+| Domaine | Ce qui a été fait |
+|---|---|
+| SIEM / Splunk | Investigation complète sur dataset BOTS v1 : SPL (rex, timechart, dedup), corrélation multi-sources, attribution APT, analyse ransomware Cerber |
+| Sécurité réseau | Déploiement pfSense CE architecture trois zones WAN/LAN/DMZ, NAT Port Forwarding, filtrage stateful, hardening WebGUI |
+| Analyse réseau | Analyse de captures pcap, extraction de credentials, reconstruction de kill chain, enrichissement VirusTotal |
+| Sécurité applicative | SQLi UNION-based et Blind Boolean sur DVWA, brute force Hydra, command injection, reverse shell en environnement contrôlé |
+| Systèmes | Installation et administration de base Kali Linux, Debian 13, Windows CLI — lab multi-VM sous VirtualBox |
+| GRC | RGPD, ISO 27001, NIS2, guides ANSSI — notions théoriques |
+| Certifications | CompTIA Security+ SY0-701 — prévu juillet 2026 |
 
-## Certifications visées : 
-- **CompTIA Security + SY0-701** (prévu : juillet 2026)
+---
 
-## Contact :
-Hauts-de-France - Disponible pour missions et opportunités en cybersécurité
+## Write-ups et exercices pratiques
+
+Structure de chaque write-up : contexte métier → méthodologie → résultats → analyse → recommandations actionnables.
+
+| Lab | Date |
+|---|---|
+| [pfSense N2 — Architecture trois zones NordLogistique (reconstruction from scratch)](semaine_12/write_up_pfsense_segmentation_reseau.md) | juin 2026 |
+| [Déploiement pfSense et politique de filtrage réseau](semaine_11/Introduction_pfSense.md) | juin 2026 |
+| [DVWA - Brute Force et Command Injection](semaine_10/write_up_DVWA_Decouverte.md) | mai 2026 |
+| [Investigation SOC BOTSv1 - Ransomware Cerber](semaine_10/write_up_SOC_Investigation_Cerber.md) | mai 2026 |
+| [Investigation réseau PacketMaze - Wireshark](semaine_10/write_up_wireshark_packetmaze.md) | mai 2026 |
+| [Investigation SOC BOTSv1 - APT Po1s0n1vy](semaine_09/write_up_SOC_investigation.md) | mai 2026 |
+| [Cross-Site Scripting (XSS)](semaine_09/write_up_XSS.md) | mai 2026 |
+| [Injection SQL](semaine_09/write_up_injection_SQL.md) | mai 2026 |
+| [Investigation Web - Wireshark](semaine_09/write_up_wireshark_investigation_web.md) | mai 2026 |
+| [Lab Splunk — Analyse de logs Windows](semaine_08/write_up_splunk.md) | avril 2026 |
+| [Scan Nmap — Vulnérabilités](semaine_07/write_up_nmap_vuln.md) | avril 2026 |
+| [Scan Nmap — Metasploitable 2](semaine_06/write_up_nmap_metasploitable.md) | avril 2026 |
+
+---
+
+## Environnement de lab
+
+- **Hyperviseur :** VirtualBox sur Windows (Ryzen 5 5600X, 32 Go RAM)
+- **VMs actives :** Kali Linux · Debian 13 · pfSense CE · Metasploitable 2
+- **Architecture courante :** réseau trois zones WAN/LAN/DMZ avec pfSense en coupure
+- **SIEM local :** Splunk Free (ingestion de logs réels)
+- **Outils utilisés :** Nmap · Wireshark · Splunk/SPL · Hydra · Netcat · DVWA
+
+---
+
+## Contact
+
+Hauts-de-France — Disponible pour opportunités en cybersécurité (CDI, CDD, alternance)
