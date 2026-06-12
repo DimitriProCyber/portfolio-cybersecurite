@@ -3,7 +3,7 @@
 **11 juin 2026**
 
 **Environnement :** Home lab VirtualBox — domaine `dpro.lab`  
-**Objectif :** Déployer un contrôleur de domaine Windows Server 2022 dans un contexte PME : DC, DNS, DHCP, OUs, GPO, audit et délégation de droits.
+**Objectif :** Déployer un contrôleur de domaine Windows Server 2022 dans un contexte PME : DC, DNS, DHCP, OUs, GPO, audit et délégation de droits.  
 **Difficulté :** N1 - Guidé
 
 
@@ -13,7 +13,6 @@ La grande majorité des entreprises de plus de dix personnes s'appuient sur Micr
 
 Ce lab reproduit le déploiement initial d'une infrastructure d'annuaire dans un contexte PME fictif. L'objectif était de passer d'un serveur Windows vierge à un contrôleur de domaine pleinement opérationnel, avec une structure organisationnelle cohérente, des politiques de sécurité appliquées par GPO, de l'audit activé et une délégation de droits correctement configurée.
 
----
 
 ## Environnement technique
 
@@ -26,7 +25,6 @@ Ce lab reproduit le déploiement initial d'une infrastructure d'annuaire dans un
 | Adresse IP fixe | 192.168.56.110 |
 | DNS | 127.0.0.1 (le DC se résout lui-même) |
 
----
 
 ## Méthodologie
 
@@ -36,7 +34,7 @@ Le déploiement a suivi un ordre logique dicté par les dépendances techniques 
 
 La VM a été créée dans VirtualBox avec 4 Go de RAM, 2 vCPUs, 60 Go de disque dynamique et une carte réseau en mode Host-Only. Le firmware UEFI a été sélectionné dans les paramètres système de la VM.
 
-Le choix de l'UEFI dans ce contexte se justifie par plusieurs éléments : tout d'abord il est le remplaçant du BIOS et est présent sur tous les matériel depuis 2012. Il supporte des disques avec une meilleure capacité (supérieurs à 2To) ce qui aujourd'hui est courant sur les serveurs d'entreprise. Enfin, il intègre un point de sécurité indispensable en 2026 : le Secure Boot, qui permet d'examiner l'intégrité de la chaîne de démarrage en vérifiant la signature cryptographique du chargeur de démarrage avant de le charger.
+Le choix de l'UEFI dans ce contexte se justifie par plusieurs éléments : tout d'abord il est le remplaçant du BIOS et est présent sur tous les matériels depuis 2012. Il supporte des disques avec une meilleure capacité (supérieurs à 2To) ce qui aujourd'hui est courant sur les serveurs d'entreprise. Enfin, il intègre un point de sécurité indispensable en 2026 : le Secure Boot, qui permet de vérifier l'intégrité de la chaîne de démarrage en vérifiant la signature cryptographique du chargeur de démarrage avant de le charger.
 
 L'ISO Windows Server 2022 a été montée via Périphériques → Lecteurs optiques. L'édition retenue est la **Standard avec expérience de bureau**. Il existe une édition Core, sans interface graphique, qui est recommandée en production.
 
@@ -48,7 +46,7 @@ Le type d'installation sélectionné est **Personnalisé** (et non Mise à jour)
 
 Une fois connecté, la configuration réseau a été modifiée via Gestionnaire de serveur → Serveur local → clic sur l'adresse IP → Propriétés → TCP/IPv4. Les paramètres suivants ont été appliqués : adresse IP `192.168.56.110`, masque `255.255.255.0`, passerelle laissée vide (réseau isolé). Le point critique est la configuration DNS : l'adresse `127.0.0.1` (loopback) a été renseignée comme serveur DNS préféré.
 
-On met le DC en tant que son propre DNS car lors de son démarrage il va chercher à résoudre `dpro.lab`, et il est le seul capable de le faire. Un DNS extérieur ne connaitra pas ce domaine, et il sera donc inaccessible après la promotion du serveur en DC. On s'assure ainsi que le DC interroge son propre DNS au démarrage, quel que soit l'état du réseau autour de lui.
+On met le DC en tant que son propre DNS car lors de son démarrage il va chercher à résoudre `dpro.lab`, et il est le seul capable de le faire. Un DNS extérieur ne connaîtra pas ce domaine, et il sera donc inaccessible après la promotion du serveur en DC. On s'assure ainsi que le DC interroge son propre DNS au démarrage, quel que soit l'état du réseau autour de lui.
 
 Avant sa promotion, le serveur a également été renommé `DC01` via Gestionnaire de serveur → Serveur local → clic sur le nom de la machine → Modifier. Le redémarrage a été effectué à la suite de ces modifications.
 
@@ -60,7 +58,7 @@ Le rôle **Active Directory Domain Services** a été installé via Gestionnaire
 
 Après installation, le lien **"Promouvoir ce serveur en contrôleur de domaine"** est apparu dans le Gestionnaire de serveur. La configuration retenue : nouvelle forêt, domaine racine `dpro.lab`, niveau fonctionnel Windows Server 2016, avec DNS intégré et Catalogue global cochés, RODC (Read Only Domain Controller) décoché.
 
-Le catalogue global est un catalogue qui regroupe des éléments provenant de l'ensemble de la forêt. C'est en quelque sorte un annuaire central : quand un utilisateur se connecte ou fait une recherche dans l'annuaire, Windows interroge le catalogue global pour trouver l'objet sans avoir à interroger chaque domaine de la foret. Sans catalogue global sur le premier DC d'une foret, les ouvertures de session et recherches dans l'annuaire échouent (il n'y a pas d'autre DC pour prendre le relais).
+Le catalogue global est un catalogue qui regroupe des éléments provenant de l'ensemble de la forêt. C'est en quelque sorte un annuaire central : quand un utilisateur se connecte ou fait une recherche dans l'annuaire, Windows interroge le catalogue global pour trouver l'objet sans avoir à interroger chaque domaine de la forêt. Sans catalogue global sur le premier DC d'une forêt, les ouvertures de session et recherches dans l'annuaire échouent (il n'y a pas d'autre DC pour prendre le relais).
 
 L'avertissement concernant la délégation DNS a été ignoré : il signale simplement qu'il n'existe pas de DNS parent auquel déléguer `dpro.lab`, ce qui est normal dans un lab isolé. Après redémarrage, la validation a été faite en ligne de commande PowerShell :
 
@@ -72,7 +70,7 @@ Résultat obtenu : réponse de `192.168.56.110`, 0% de perte. Le DNS fonctionne 
 
 ### 4. Assouplissement de la politique de mots de passe (contexte lab)
 
-Via Outils → Gestion des stratégies de groupe → clic droit sur **Default Domain Policy** → Modifier → Configuration ordinateur → Stratégies → Paramètres Windows → Paramètres de sécurité → Stratégies de comptes → Stratégie de mot de passe, la complexité a été désactivée et la longueur minimale réduite à 4 caractères. Cela permet d'éviter de créer des mots de passe trop complexe lors de la création de nouveaux comptes : il s'agit d'un exercice en environnement isolé donc les mots de passe sont peu pertinents, et cela permet de voir également comment modifier une telle politique. La commande `gpupdate /force` a été exécutée via un PowerShell pour appliquer immédiatement les changements.
+Via Outils → Gestion des stratégies de groupe → clic droit sur **Default Domain Policy** → Modifier → Configuration ordinateur → Stratégies → Paramètres Windows → Paramètres de sécurité → Stratégies de comptes → Stratégie de mot de passe, la complexité a été désactivée et la longueur minimale réduite à 4 caractères. Cela permet d'éviter de créer des mots de passe trop complexes lors de la création de nouveaux comptes : il s'agit d'un exercice en environnement isolé donc les mots de passe sont peu pertinents, et cela permet de voir également comment modifier une telle politique. La commande `gpupdate /force` a été exécutée via un PowerShell pour appliquer immédiatement les changements.
 
 Cette configuration n'est valable qu'en lab. En production, une politique de mots de passe renforcée s'applique (voir section Recommandations).
 
@@ -119,13 +117,14 @@ L'audit a été activé sur la **Default Domain Policy** via clic droit → Modi
 | Événements de connexion aux comptes | 4624 (connexion réussie), 4625 (échec) |
 | Gestion des comptes | 4720 (création), 4726 (suppression) |
 | Événements de connexion | Connexions locales et RDP |
+
 On active l'audit dès le déploiement pour établir une baseline des comportements normaux sur le domaine. De plus, si un incident de sécurité devait se produire, les logs permettront à l'investigateur de retracer le parcours de l'attaquant. Activer l'audit après un incident, c'est trop tard : les traces des actions antérieures sont perdues définitivement.
 
 ### 9. Délégation de droits
 
 Via Utilisateurs et ordinateurs Active Directory → clic droit sur l'OU **RH** → Déléguer le contrôle, le compte `t.bernard` a reçu la permission de réinitialiser les mots de passe des utilisateurs de cette OU uniquement.
 
-Le compte de `t.bernard` n'est pas un compte administrateur : il n'a pas à avoir tous les droits sur le domaine. A la place on préfère lui déléguer les droits nécessaires à l'exécution de sa fonction, appliquant ainsi le principe du moindre privilège. Un compte Domain Admins compromis donne un accès total à l'ensemble du domaine : c'est le scénario catastrophe que tout administrateur cherche à éviter
+Le compte de `t.bernard` n'est pas un compte administrateur : il n'a pas à avoir tous les droits sur le domaine. A la place on préfère lui déléguer les droits nécessaires à l'exécution de sa fonction, appliquant ainsi le principe du moindre privilège. Un compte Domain Admins compromis donne un accès total à l'ensemble du domaine : c'est le scénario catastrophe que tout administrateur cherche à éviter.
 
 ### 10. Installation et configuration du rôle DHCP
 
@@ -144,7 +143,6 @@ L'étendue `LAN_dpro` a été créée via Outils → DHCP → IPv4 → Nouvelle 
 
 Ainsi, tout poste qui rejoint le réseau obtient automatiquement une adresse IP et l'adresse du serveur DNS du domaine, sans aucune configuration manuelle.
 
----
 
 ## Résultats
 
@@ -161,28 +159,30 @@ Ainsi, tout poste qui rejoint le réseau obtient automatiquement une adresse IP 
 | Délégation reset mdp : `t.bernard` sur OU RH | Configurée |
 | Rôle DHCP | Installé, autorisé, étendue LAN_dpro active |
 
----
 
 ## Analyse
 
-> **[Quelle étape t'a semblé la plus critique dans ce déploiement — celle où une erreur aurait cassé tout le reste ? Et qu'est-ce que tu ferais différemment dans un contexte professionnel réel par rapport à ce lab ?]**
-> *Votre réponse ici (5-8 phrases)*
+Au cours du déploiement d'Active Directory, deux étapes m'ont paru particulièrement critiques : le choix du nom du DC et le paramétrage du DNS. Si ces étapes sont mal pensées à l'avance et/ou mal configurées, on expose facilement le serveur à des problèmes de fonctionnement. Il est donc impératif de se lancer dans le déploiement d'un AD avec une vision d'ensemble déjà bien établie ce qui permettra de minimiser les risques d'erreur.
 
----
+Les politiques de GPO et de délégations sont également des points à ne pas négliger, car si elles ne sont pas appliquées avec minutie des oublis ou au contraire des permissions inutiles peuvent être accordées, pouvant potentiellement créer des comportements indésirables. Cette fois encore, une bonne préparation en amont et une vue d'ensemble claire est nécessaire pour déterminer ce qui sera appliqué ou non.
+
 
 ## Recommandations de sécurité
 
-*Ce lab est un déploiement de base dans un contexte de découverte. En environnement de production, les mesures suivantes s'appliqueraient :*
+Ce lab est un déploiement de base dans un contexte de découverte. En environnement de production, les mesures suivantes s'appliqueraient :
 
-> **[4 à 6 recommandations avec une justification courte chacune. Thèmes suggérés : séparation compte admin / compte utilisateur quotidien — désactivation du compte Administrateur intégré — politique de mots de passe renforcée — LAPS pour les comptes locaux — audit avancé par sous-catégories — sauvegarde System State du DC.]**
-> *Vos recommandations ici*
+- **Séparation du compte admin et compte utilisateur quotidien :** l'administrateur n'a pas besoin d'utiliser un compte avec toutes les permissions pour ses activités quotidiennes sans rapport avec la gestion du DC. De plus, utiliser un compte admin pour des activités quotidiennes augmente les risques de compromission du compte, ce qui serait le pire scénario pour une entreprise.
+- **Politique de mots de passe renforcée :** par défaut AD demandait un mot de passe alphanumérique de 7 caractères. Cependant l'ANSSI recommande des mots de passe plus robustes comprenant 12 caractères au minimum, avec une majuscule, un chiffre et un caractère spécial au moins. Cette politique renforce la sécurité des comptes admin comme utilisateurs.
+- **Désactivation du compte administrateur intégré :** ce compte est un compte par défaut et donc connu par tous les attaquants. Son nom est prévisible et il sera une cible prioritaire pour les attaques par brute force. Il est plus judicieux de le désactiver et de créer un compte admin avec un nom non prévisible.
+- **Utiliser LAPS (Local Administrator Password Solution) pour les comptes locaux :** beaucoup d'entreprises ont le même mot de passe administrateur local sur tous les postes, ce qui implique que si un attaquant compromet un poste, il peut se connecter en administrateur local sur tous les autres postes. Pour éviter cela, on peut utiliser l'outil Microsoft LAPS qui permet de gérer automatiquement le mot de passe administrateur local sur tous les postes.
+- **Audit avancé par sous-catégorie :** l'audit activé dans ce lab est l'audit classique qui active des catégories larges. Il existe en réalité un niveau plus fin : les sous-catégories d'audit avancé, permettant d'avoir un niveau d'information plus fin (par exemple plutôt que d'activer "Connexion" on va activer "Ouverture de session" ou "Fermeture de session"), ce qui évite de noyer les logs avec des événements inutiles.
+- **Sauvegarde du DC :** la sauvegarde Windows Server permet de sauvegarder l'état du système permettant une restauration en cas de panne ou de corruption. En production, cette tâche doit être planifiée, quotidienne et sur un stockage séparé.
 
----
 
 ## Conclusion
 
-Ce lab couvre le déploiement minimal d'un Active Directory dans un contexte PME : structure OU, comptes, groupes, GPO, audit et délégation. C'est la fondation sur laquelle repose toute l'administration Windows en entreprise — et la base sur laquelle le lab de la semaine 14 ajoutera une couche d'automatisation PowerShell, une politique de mots de passe renforcée selon les recommandations ANSSI, et une jonction de poste Windows au domaine.
+Ce lab couvre le déploiement minimal d'un Active Directory dans un contexte PME : structure OU, comptes, groupes, GPO, audit et délégation. C'est la fondation sur laquelle repose toute l'administration Windows en entreprise, et la base sur laquelle le prochain lab ajoutera une couche d'automatisation PowerShell, une politique de mots de passe renforcée selon les recommandations ANSSI, et une jonction de poste Windows au domaine.
 
 ---
 
-*Write-up rédigé dans le cadre d'un parcours de reconversion en cybersécurité — portfolio complet sur [github.com/DimitriProCyber](https://github.com/DimitriProCyber)*
+*Write-up rédigé dans le cadre d'un parcours de reconversion en cybersécurité*
