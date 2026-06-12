@@ -10,11 +10,11 @@ Disponible en Hauts-de-France — ouvert aux opportunités en **technicien sécu
 
 | Domaine | Réalisations |
 |---|---|
-| SIEM / Splunk | Investigation complète sur dataset BOTS v1 : SPL (rex, timechart, dedup), corrélation multi-sources, attribution APT, analyse ransomware Cerber |
+| Systèmes & Active Directory | Déploiement Windows Server 2022 : promotion DC, DNS/DHCP intégrés, structure OU, groupes de sécurité, GPO, audit et délégation de droits — domaine `dpro.lab` |
 | Sécurité réseau | Déploiement pfSense CE en architecture trois zones WAN/LAN/DMZ, NAT Port Forwarding, filtrage stateful, hardening WebGUI |
+| SIEM / Splunk | Investigation complète sur dataset BOTS v1 : SPL (rex, timechart, dedup), corrélation multi-sources, attribution APT, analyse ransomware Cerber |
 | Analyse réseau | Analyse de captures pcap, extraction de credentials, reconstruction de kill chain, enrichissement VirusTotal |
 | Sécurité applicative | SQLi UNION-based et Blind Boolean sur DVWA, brute force Hydra, command injection, reverse shell en environnement contrôlé |
-| Systèmes & Active Directory | Déploiement Windows Server 2022 : promotion DC, DNS/DHCP intégrés, structure OU, groupes de sécurité, GPO, audit et délégation de droits — domaine `dpro.lab` |
 | Environnement lab | Lab multi-VM sous VirtualBox : Kali Linux, Debian, Windows Server 2022, administration courante Linux et Windows CLI |
 | GRC | RGPD, ISO 27001, NIS2, guides ANSSI — notions théoriques |
 | Certifications | CompTIA Security+ SY0-701 — prévu juillet 2026 |
