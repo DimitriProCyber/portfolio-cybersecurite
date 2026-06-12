@@ -14,7 +14,8 @@ Disponible en Hauts-de-France — ouvert aux opportunités en **technicien sécu
 | Sécurité réseau | Déploiement pfSense CE en architecture trois zones WAN/LAN/DMZ, NAT Port Forwarding, filtrage stateful, hardening WebGUI |
 | Analyse réseau | Analyse de captures pcap, extraction de credentials, reconstruction de kill chain, enrichissement VirusTotal |
 | Sécurité applicative | SQLi UNION-based et Blind Boolean sur DVWA, brute force Hydra, command injection, reverse shell en environnement contrôlé |
-| Systèmes | Installation et administration de base Kali Linux, Debian 13, Windows CLI — lab multi-VM sous VirtualBox |
+| Systèmes & Active Directory | Déploiement Windows Server 2022 : promotion DC, DNS/DHCP intégrés, structure OU, groupes de sécurité, GPO, audit et délégation de droits — domaine `dpro.lab` |
+| Environnement lab | Lab multi-VM sous VirtualBox : Kali Linux, Debian, Windows Server 2022, administration courante Linux et Windows CLI |
 | GRC | RGPD, ISO 27001, NIS2, guides ANSSI — notions théoriques |
 | Certifications | CompTIA Security+ SY0-701 — prévu juillet 2026 |
 
@@ -26,6 +27,7 @@ Structure de chaque write-up : contexte métier → méthodologie → résultats
 
 | Lab | Date |
 |---|---|
+| [Déploiement Active Directory : infrastucture d'annuaire pour une PME](semaine_13/write_up_AD_deploiement.md) | 11 juin 2026|
 | [Déploiement et sécurisation d'une infrastructure réseau en trois zones avec pfSense)](semaine_12/write_up_pfsense_segmentation_reseau.md) | 06 juin 2026 |
 | [Déploiement pfSense et politique de filtrage réseau](semaine_11/Introduction_pfSense.md) | 03 juin 2026 |
 | [DVWA - Brute Force et Command Injection](semaine_10/write_up_DVWA_Decouverte.md) | 29 mai 2026 |
