@@ -10,7 +10,8 @@ Disponible en Hauts-de-France — ouvert aux opportunités en **technicien sécu
 
 | Domaine | Réalisations |
 |---|---|
-| Systèmes & Active Directory | Déploiement Windows Server 2022 : promotion DC, DNS/DHCP intégrés, structure OU, groupes de sécurité, GPO, audit et délégation de droits — domaine `dpro.lab`. Déploiement N2 autonome niveau PME : 50 comptes utilisateurs via scripting PowerShell, GPO conformes ANSSI (politique de mot de passe, audit complet, restrictions), délégation de droits helpdesk, export de comptes inactifs, intégration de poste au domaine via GUI et PowerShell |
+| Systèmes & Active Directory | Déploiement Windows Server 2022 : promotion DC, DNS/DHCP intégrés, structure OU, groupes de sécurité, GPO, audit et délégation de droits — domaine `dpro.lab`.  
+Déploiement N2 niveau PME : 50 comptes utilisateurs via scripting PowerShell, GPO conformes ANSSI (politique de mot de passe, audit complet, restrictions), délégation de droits helpdesk, export de comptes inactifs, intégration de poste au domaine via GUI et PowerShell |
 | Sécurité réseau | Déploiement pfSense CE en architecture trois zones WAN/LAN/DMZ, NAT Port Forwarding, filtrage stateful, hardening WebGUI |
 | SIEM / Splunk | Investigation complète sur dataset BOTS v1 : SPL (rex, timechart, dedup), corrélation multi-sources, attribution APT, analyse ransomware Cerber |
 | Analyse réseau | Analyse de captures pcap, extraction de credentials, reconstruction de kill chain, enrichissement VirusTotal |
