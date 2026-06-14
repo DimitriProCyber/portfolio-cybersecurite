@@ -10,12 +10,12 @@ Disponible en Hauts-de-France — ouvert aux opportunités en **technicien sécu
 
 | Domaine | Réalisations |
 |---|---|
-| Systèmes & Active Directory | Déploiement Windows Server 2022 : promotion DC, DNS/DHCP intégrés, structure OU, groupes de sécurité, GPO, audit et délégation de droits — domaine `dpro.lab` |
+| Systèmes & Active Directory | Déploiement Windows Server 2022 : promotion DC, DNS/DHCP intégrés, structure OU, groupes de sécurité, GPO, audit et délégation de droits — domaine `dpro.lab`. Déploiement N2 autonome niveau PME : 50 comptes utilisateurs via scripting PowerShell, GPO conformes ANSSI (politique de mot de passe, audit complet, restrictions), délégation de droits helpdesk, export de comptes inactifs, intégration de poste au domaine via GUI et PowerShell |
 | Sécurité réseau | Déploiement pfSense CE en architecture trois zones WAN/LAN/DMZ, NAT Port Forwarding, filtrage stateful, hardening WebGUI |
 | SIEM / Splunk | Investigation complète sur dataset BOTS v1 : SPL (rex, timechart, dedup), corrélation multi-sources, attribution APT, analyse ransomware Cerber |
 | Analyse réseau | Analyse de captures pcap, extraction de credentials, reconstruction de kill chain, enrichissement VirusTotal |
 | Sécurité applicative | SQLi UNION-based et Blind Boolean sur DVWA, brute force Hydra, command injection, reverse shell en environnement contrôlé |
-| Environnement lab | Lab multi-VM sous VirtualBox : Kali Linux, Debian, Windows Server 2022, administration courante Linux et Windows CLI |
+| Environnement lab | Lab multi-VM sous VirtualBox : Kali Linux, Debian, Windows Server 2022, Windows 11, administration courante Linux et Windows CLI |
 | GRC | RGPD, ISO 27001, NIS2, guides ANSSI — notions théoriques |
 | Certifications | CompTIA Security+ SY0-701 — prévu juillet 2026 |
 
@@ -27,6 +27,7 @@ Structure de chaque write-up : contexte métier → méthodologie → résultats
 
 | Lab | Date |
 |---|---|
+| [Active Directory niveau 2 : déploiement d'un environnement PME](semaine_14/write_up_AD_deploiement_suite.md) | 14 juin 2026 |
 | [Déploiement Active Directory : infrastucture d'annuaire pour une PME](semaine_13/write_up_AD_deploiement.md) | 11 juin 2026|
 | [Déploiement et sécurisation d'une infrastructure réseau en trois zones avec pfSense)](semaine_12/write_up_pfsense_segmentation_reseau.md) | 06 juin 2026 |
 | [Déploiement pfSense et politique de filtrage réseau](semaine_11/Introduction_pfSense.md) | 03 juin 2026 |
@@ -46,10 +47,10 @@ Structure de chaque write-up : contexte métier → méthodologie → résultats
 ## Environnement de lab
 
 - **Hyperviseur :** VirtualBox sur Windows (Ryzen 5 5600X, 32 Go RAM)
-- **VMs actives :** Kali Linux · Debian 13 · pfSense CE · Metasploitable 2
-- **Architecture courante :** réseau trois zones WAN/LAN/DMZ avec pfSense en coupure
+- **VMs actives :** Kali Linux · Debian 13 · pfSense CE · Metasploitable 2 · Windows Server 2022 (DC01) · Windows 11 Professionnel (PC01)
+- **Architecture courante :** réseau trois zones WAN/LAN/DMZ avec pfSense en coupure · domaine Active Directory `dpro.lab`
 - **SIEM local :** Splunk Free (ingestion de logs réels)
-- **Outils utilisés :** Nmap · Wireshark · Splunk/SPL · Hydra · Netcat · DVWA
+- **Outils utilisés :** Nmap · Wireshark · Splunk/SPL · Hydra · Netcat · DVWA · PowerShell AD
 
 ---
 
