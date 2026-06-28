@@ -27,6 +27,7 @@ Structure de chaque write-up : contexte métier → méthodologie → résultats
 
 | Lab | Date |
 |---|---|
+| [Déploiement d'une infrastructure réseau PME complète](semaine_15/write_up_deploiement_infrastructure_reseau.md) | 27 juin 2026 |
 | [Active Directory niveau 2 : déploiement d'un environnement PME](semaine_14/write_up_AD_deploiement_suite.md) | 14 juin 2026 |
 | [Déploiement Active Directory : infrastucture d'annuaire pour une PME](semaine_13/write_up_AD_deploiement.md) | 11 juin 2026|
 | [Déploiement et sécurisation d'une infrastructure réseau en trois zones avec pfSense)](semaine_12/write_up_pfsense_segmentation_reseau.md) | 06 juin 2026 |
