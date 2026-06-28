@@ -11,11 +11,11 @@ Disponible en Hauts-de-France — ouvert aux opportunités en **technicien sécu
 | Domaine | Réalisations |
 |---|---|
 | Systèmes & Active Directory | Déploiement Windows Server 2022 : promotion DC, DNS/DHCP intégrés, structure OU, groupes de sécurité, GPO, audit et délégation de droits — domaine `dpro.lab` <br>Déploiement N2 niveau PME : 50 comptes utilisateurs via scripting PowerShell, GPO conformes ANSSI (politique de mot de passe, audit complet, restrictions), délégation de droits helpdesk, export de comptes inactifs, intégration de poste au domaine via GUI et PowerShell |
-| Sécurité réseau | Déploiement pfSense CE en architecture trois zones WAN/LAN/DMZ, NAT Port Forwarding, filtrage stateful, hardening WebGUI |
+| Sécurité réseau | Déploiement pfSense CE en architecture trois zones WAN/LAN/DMZ, NAT Port Forwarding, filtrage stateful, hardening WebGUI <br>Segmentation VLAN (802.1Q, router-on-a-stick), NAT/PAT et diagnostic réseau OSI sur Cisco IOS <br>Déploiement VPN WireGuard (tunnel chiffré Curve25519/ChaCha20, échange de clés, validation Wireshark) |
 | SIEM / Splunk | Investigation complète sur dataset BOTS v1 : SPL (rex, timechart, dedup), corrélation multi-sources, attribution APT, analyse ransomware Cerber |
 | Analyse réseau | Analyse de captures pcap, extraction de credentials, reconstruction de kill chain, enrichissement VirusTotal |
 | Sécurité applicative | SQLi UNION-based et Blind Boolean sur DVWA, brute force Hydra, command injection, reverse shell en environnement contrôlé |
-| Environnement lab | Lab multi-VM sous VirtualBox : Kali Linux, Debian, Windows Server 2022, Windows 11, administration courante Linux et Windows CLI |
+| Environnement lab | Lab multi-VM sous VirtualBox : Kali Linux, Debian, Windows Server 2022, Windows 11, administration courante Linux et Windows CLI  <br>Cisco Packet Tracer (topologie PME multi-switches et routeur) |
 | GRC | RGPD, ISO 27001, NIS2, guides ANSSI — notions théoriques |
 | Certifications | CompTIA Security+ SY0-701 — prévu juillet 2026 |
 
