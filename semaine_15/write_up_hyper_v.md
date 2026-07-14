@@ -129,7 +129,19 @@ Une fois PC02 installé, j'ai confirmé la stabilité de son adressage avec `ipc
 
 ### Jonction au domaine et diagnostic réseau
 
-*(section à rédiger)*
+Après la création de la VM PC02, l'étape suivante est d'associer ce poste au domaine `dpro.lab` afin qu'il soit intégré à un réseau d'entreprise et utilisable par l'ensemble des employés.
+
+L'opération de jonction s'est déroulée sur une journée différente de celle de la création. Il s'est avéré que ce jour, j'ai démarré PC02 avant DC01. Cet ordre de démarrage a empêché la VM d'établir correctement sa configuration réseau. En effet, dans une infrastructure qui dépend d'un serveur central pour le DHCP et le DNS, le serveur doit déjà être en ligne afin que les différentes machines puissent le consulter pour configurer leur IP, gateway et DNS de manière cohérente avec le reste du réseau.
+
+Suite à une première tentative de jonction de la VM au domaine, avec la commande `Add-Computer -DomainName "dpro.lab" -Credential administrateur@dpro.lab -Restart`, l'erreur suivante est apparue : `Add-Computer : L'ordinateur « DESKTOP-NN5J43N » n'a pas pu joindre le domaine « dpro.lab » à partir de son groupe de travail actuel « WORKGROUP » avec le message d'erreur suivant : Le domaine spécifié n'existe pas ou n'a pas pu être contacté.`. 
+
+Ce message d'erreur étant peu explicite sur la cause réelle de l'erreur, il a été nécessaire de procéder à un diagnostic méthodique par étapes afin de déterminer ce qui empêchait PC02 de joindre le domaine.
+
+La première étape est de vérifier la configuration réseau de PC02 grâce à la commande `ipconfig /all`. J'ai pu constater dans les résultats, que l'IP de la VM était 169.254.58.167. Les adresses IP au format 169.254.0.0/16 sont des adresses APIPA (Automatic Private Internet Protocol Addressing), et sont attribuées à une machine lorsque les requêtes DHCP de celle-ci échouent. Il s'agit d'un réseau privé, qui n'est pas routable sur internet et la machine ne pourra communiquer qu'avec des cartes réseaux configurées en APIPA également.
+
+Ici, DC01 n'étant pas encore allumé il était normal que PC02 s'est vu attribuer une adresse APIPA, car le serveur DHCP n'était pas joignable.
+
+FINIR REDACTION
 
 ## Résultats
 
