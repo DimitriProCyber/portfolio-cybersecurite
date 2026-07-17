@@ -137,11 +137,15 @@ Suite à une première tentative de jonction de la VM au domaine, avec la comman
 
 Ce message d'erreur étant peu explicite sur la cause réelle de l'erreur, il a été nécessaire de procéder à un diagnostic méthodique par étapes afin de déterminer ce qui empêchait PC02 de joindre le domaine.
 
-La première étape est de vérifier la configuration réseau de PC02 grâce à la commande `ipconfig /all`. J'ai pu constater dans les résultats, que l'IP de la VM était 169.254.58.167. Les adresses IP au format 169.254.0.0/16 sont des adresses APIPA (Automatic Private Internet Protocol Addressing), et sont attribuées à une machine lorsque les requêtes DHCP de celle-ci échouent. Il s'agit d'un réseau privé, qui n'est pas routable sur internet et la machine ne pourra communiquer qu'avec des cartes réseaux configurées en APIPA également.
+La première étape est de vérifier la configuration réseau de PC02 grâce à la commande `ipconfig /all`. J'ai pu constater dans les résultats, que l'IP de la VM était 169.254.58.167. Les adresses IP au format 169.254.0.0/16 sont des adresses APIPA (Automatic Private Internet Protocol Addressing), et sont attribuées à une machine lorsque les requêtes DHCP de celle-ci échouent. Il s'agit d'un réseau privé, qui n'est pas routable sur internet et la machine ne pourra communiquer qu'avec des cartes réseaux configurées en APIPA également. Ici, DC01 n'étant pas encore allumé il était normal que PC02 s'est vu attribuer une adresse APIPA, car le serveur DHCP n'était pas joignable.
 
-Ici, DC01 n'étant pas encore allumé il était normal que PC02 s'est vu attribuer une adresse APIPA, car le serveur DHCP n'était pas joignable.
+Afin de pouvoir donner une adresse IP utilisable sur notre réseau à PC02, on utilise la commande `ipconfig /release` qui permet de réinitialiser la configuration IP suivie de `ipconfig /renew` qui va permettre renouveler l'adresse IP en envoyant une requête au serveur DHCP. L'IP alors obtenue est 192.168.56.108, ce qui correspond à une IP du réseau sur lequel se situe DC01, cependant le DNS n'a pas été mit à jour. J'ai donc modifié manuellement le DNS grâce à la commande `Set-DnsClientServerAddress -InterfaceAlias "Ethernet" -ServerAddresses 192.168.56.110` qui permet de mettre une adresse de serveur spécifique et manuellement sur la carte réseau de notre choix (ici "Ethernet").
 
-FINIR REDACTION
+Afin de tester la reconfiguration des paramètres réseau, j'ai utilisé la commande `nslookup dpro.lab` qui permet de tester la résolution du DNS de façon isolée, évitant de repasser par une tentative de jonction de domaine, et en cas d'erreur de devoir chercher d’où elle vient. Si la résolution fonctionne, en cas d'échec de la jonction, il sera possible de directement éliminer cette cause. Par contre si la résolution échoue, on évite de relancer un processus complet, ce qui nous permet d'identifier directement la cause et de pouvoir résoudre le problème. Le résultat de la commande a été un time out : le serveur n'était pas joignable.
+
+
+
+En cherchant la cause, c'est là que je me suis rendu compte que DC01 était hors ligne. Un redémarrage a permis la résolution du DNS qui a été de nouveau vérifiée grâce à `nslookup dpro.lab`, autorisant alors la jonction de PC02 au domaine.
 
 ## Résultats
 
