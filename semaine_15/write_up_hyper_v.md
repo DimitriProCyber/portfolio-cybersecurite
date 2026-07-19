@@ -139,13 +139,15 @@ Ce message d'erreur étant peu explicite sur la cause réelle de l'erreur, il a 
 
 La première étape est de vérifier la configuration réseau de PC02 grâce à la commande `ipconfig /all`. J'ai pu constater dans les résultats, que l'IP de la VM était 169.254.58.167. Les adresses IP au format 169.254.0.0/16 sont des adresses APIPA (Automatic Private Internet Protocol Addressing), et sont attribuées à une machine lorsque les requêtes DHCP de celle-ci échouent. Il s'agit d'un réseau privé, qui n'est pas routable sur internet et la machine ne pourra communiquer qu'avec des cartes réseaux configurées en APIPA également. Ici, DC01 n'étant pas encore allumé il était normal que PC02 s'est vu attribuer une adresse APIPA, car le serveur DHCP n'était pas joignable.
 
-Afin de pouvoir donner une adresse IP utilisable sur notre réseau à PC02, on utilise la commande `ipconfig /release` qui permet de réinitialiser la configuration IP suivie de `ipconfig /renew` qui va permettre renouveler l'adresse IP en envoyant une requête au serveur DHCP. L'IP alors obtenue est 192.168.56.108, ce qui correspond à une IP du réseau sur lequel se situe DC01, cependant le DNS n'a pas été mit à jour. J'ai donc modifié manuellement le DNS grâce à la commande `Set-DnsClientServerAddress -InterfaceAlias "Ethernet" -ServerAddresses 192.168.56.110` qui permet de mettre une adresse de serveur spécifique et manuellement sur la carte réseau de notre choix (ici "Ethernet").
+Afin de pouvoir donner une adresse IP utilisable sur notre réseau à PC02, on utilise la commande `ipconfig /release` qui permet de réinitialiser la configuration IP suivie de `ipconfig /renew` qui va permettre de renouveler l'adresse IP en envoyant une requête au serveur DHCP. L'IP alors obtenue est 192.168.56.108, ce qui correspond à une IP du réseau sur lequel se situe DC01, cependant le DNS n'a pas été mis à jour. J'ai donc modifié manuellement le DNS grâce à la commande `Set-DnsClientServerAddress -InterfaceAlias "Ethernet" -ServerAddresses 192.168.56.110` qui permet de définir une adresse de serveur DNS spécifique sur la carte réseau de notre choix (ici "Ethernet").
 
 Afin de tester la reconfiguration des paramètres réseau, j'ai utilisé la commande `nslookup dpro.lab` qui permet de tester la résolution du DNS de façon isolée, évitant de repasser par une tentative de jonction de domaine, et en cas d'erreur de devoir chercher d’où elle vient. Si la résolution fonctionne, en cas d'échec de la jonction, il sera possible de directement éliminer cette cause. Par contre si la résolution échoue, on évite de relancer un processus complet, ce qui nous permet d'identifier directement la cause et de pouvoir résoudre le problème. Le résultat de la commande a été un time out : le serveur n'était pas joignable.
 
-
-
 En cherchant la cause, c'est là que je me suis rendu compte que DC01 était hors ligne. Un redémarrage a permis la résolution du DNS qui a été de nouveau vérifiée grâce à `nslookup dpro.lab`, autorisant alors la jonction de PC02 au domaine.
+
+Afin de confirmer la jonction de la machine au domaine, après le redémarrage automatique, je me suis connecté avec un compte administrateur du domaine depuis PC02, afin de vérifier que la machine accédait bien aux informations stockées directement sur DC01. Depuis DC01, j'ai également exécuté la commande `Get-ADComputer -Filter * | Select-Object Name, DistinguishedName` qui permet d'afficher le nom et l'emplacement dans l'annuaire des machines ajoutées au domaine. Cette commande n'est exécutable que sur DC01 car elle fait partie du module PowerShell ActiveDirectory, qui n'est pas présent sur un simple poste client comme PC02.
+
+Les deux vérifications valident la jonction au domaine, cependant sur DC01 on peut voir que PC02 est enregistré en tant que `DESKTOP-NN5J43N`. Lors de la création de la VM, le nom qu'on lui a attribué (PC02) est simplement un nom d'affichage afin que l'utilisateur soit facilité dans l'identification des VMs qu'il utilise. Cependant, Windows génère de manière automatique un hostname et l'attribut à la VM. L'hostname Windows est utilisé pour se présenter sur le réseau, et c'est donc celui-ci qu'a vu Active Directory lorsqu'il a enregistré la machine. Il est possible de le modifier avec la commande `Rename-Computer -NewName "PC02" -Restart`. C'est ce que j'ai fait, avant d'aller de nouveau vérifier dans l'annuaire que le nouveau nom avait bien été pris en compte.
 
 ## Résultats
 
@@ -164,6 +166,10 @@ Le tableau ci-dessous récapitule les incidents rencontrés et leur résolution 
 | Nom incorrect dans l'annuaire, DESKTOP-NN5J43N | Nom VM Hyper-V distinct du hostname Windows interne | `Rename-Computer` puis re-jonction |
 
 ## Analyse comparative Hyper-V vs VirtualBox
+
+Lorsque j'ai découvert VirtualBox, celui-ci m'a sembler plus simple à appréhender au premier abord qu'Hyper-V. En effet, VirtualBox est plus intuitif et plus direct : on installe le logiciel, on télécharge l'ISO que l'on souhaite utiliser, on règle quelques paramètres et on peut se lancer. Pour Hyper-V, il est avant tout nécessaire de comprendre l'architecture de la virtualisation, qui demande de connaitre les différents types de switchs ainsi que la distinction entre partition parente et enfants par exemple. Sans ça, il n'est pas possible de paramétrer correctement la VM et de l'adapter au mieux à notre besoin. Cette différence reflète directement l'opposition entre un hyperviseur de Type 2, applicatif et immédiat, et un hyperviseur de Type 1, qui impose de comprendre son architecture avant tout utilisation.
+
+
 
 *(section à rédiger)*
 
