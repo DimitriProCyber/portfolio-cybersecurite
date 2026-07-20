@@ -10,12 +10,12 @@ Disponible en Hauts-de-France — ouvert aux opportunités en **technicien sécu
 
 | Domaine | Réalisations |
 |---|---|
-| Systèmes & Active Directory | Déploiement Windows Server 2022 : promotion DC, DNS/DHCP intégrés, structure OU, groupes de sécurité, GPO, audit et délégation de droits — domaine `dpro.lab` <br>Déploiement N2 niveau PME : 50 comptes utilisateurs via scripting PowerShell, GPO conformes ANSSI (politique de mot de passe, audit complet, restrictions), délégation de droits helpdesk, export de comptes inactifs, intégration de poste au domaine via GUI et PowerShell |
+| Systèmes & Active Directory | Déploiement Windows Server 2022 : promotion DC, DNS/DHCP intégrés, structure OU, groupes de sécurité, GPO, audit et délégation de droits — domaine `dpro.lab` <br>Déploiement N2 niveau PME : 50 comptes utilisateurs via scripting PowerShell, GPO conformes ANSSI (politique de mot de passe, audit complet, restrictions), délégation de droits helpdesk, export de comptes inactifs, intégration de poste au domaine via GUI et PowerShell <br>Jonction d'une VM Hyper-V au domaine en PowerShell (`Add-Computer`), avec diagnostic et résolution autonome d'incidents réseau réels (DHCP, DNS, résolution de nom) |
 | Sécurité réseau | Déploiement pfSense CE en architecture trois zones WAN/LAN/DMZ, NAT Port Forwarding, filtrage stateful, hardening WebGUI <br>Segmentation VLAN (802.1Q, router-on-a-stick), NAT/PAT et diagnostic réseau OSI sur Cisco IOS <br>Déploiement VPN WireGuard (tunnel chiffré Curve25519/ChaCha20, échange de clés, validation Wireshark) |
 | SIEM / Splunk | Investigation complète sur dataset BOTS v1 : SPL (rex, timechart, dedup), corrélation multi-sources, attribution APT, analyse ransomware Cerber |
 | Analyse réseau | Analyse de captures pcap, extraction de credentials, reconstruction de kill chain, enrichissement VirusTotal |
 | Sécurité applicative | SQLi UNION-based et Blind Boolean sur DVWA, brute force Hydra, command injection, reverse shell en environnement contrôlé |
-| Environnement lab | Lab multi-VM sous VirtualBox : Kali Linux, Debian, Windows Server 2022, Windows 11, administration courante Linux et Windows CLI  <br>Cisco Packet Tracer (topologie PME multi-switches et routeur) |
+| Environnement lab | Lab multi-hyperviseurs : VirtualBox (Kali Linux, Debian, Windows Server 2022, Windows 11) et Hyper-V (VM Windows 11 Génération 2, architecture de switches virtuels), administration courante Linux et Windows CLI <br>Cisco Packet Tracer (topologie PME multi-switches et routeur) |
 | GRC | RGPD, ISO 27001, NIS2, guides ANSSI — notions théoriques |
 | Certifications | CompTIA Security+ SY0-701 — prévu juillet 2026 |
 
@@ -27,6 +27,7 @@ Structure de chaque write-up : contexte métier → méthodologie → résultats
 
 | Lab | Date |
 |---|---|
+| [Hyper-V : Déploiement et jonction au domaine d'une PME](semaine_15/write_up_hyper_v.md) | 08 juillet 2026 |
 | [Déploiement d'une infrastructure réseau PME complète](semaine_15/write_up_deploiement_infrastructure_reseau.md) | 27 juin 2026 |
 | [Active Directory niveau 2 : déploiement d'un environnement PME](semaine_14/write_up_AD_deploiement_suite.md) | 14 juin 2026 |
 | [Déploiement Active Directory : infrastucture d'annuaire pour une PME](semaine_13/write_up_AD_deploiement.md) | 11 juin 2026|
