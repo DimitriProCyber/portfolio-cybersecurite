@@ -48,8 +48,8 @@ Structure de chaque write-up : contexte métier → méthodologie → résultats
 
 ## Environnement de lab
 
-- **Hyperviseur :** VirtualBox sur Windows (Ryzen 5 5600X, 32 Go RAM)
-- **VMs actives :** Kali Linux · Debian 13 · pfSense CE · Metasploitable 2 · Windows Server 2022 (DC01) · Windows 11 Professionnel (PC01)
+- **Hyperviseurs :** VirtualBox et Hyper-V sur Windows (Ryzen 5 5600X, 32 Go RAM)
+- **VMs actives :** Kali Linux · Debian 13 · pfSense CE · Metasploitable 2 · Windows Server 2022 (DC01) · Windows 11 Professionnel (PC01, VirtualBox) · Windows 11 (PC02, Hyper-V)
 - **Architecture courante :** réseau trois zones WAN/LAN/DMZ avec pfSense en coupure · domaine Active Directory `dpro.lab`
 - **SIEM local :** Splunk Free (ingestion de logs réels)
 - **Outils utilisés :** Nmap · Wireshark · Splunk/SPL · Hydra · Netcat · DVWA · PowerShell AD
